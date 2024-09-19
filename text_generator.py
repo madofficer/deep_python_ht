@@ -6,24 +6,24 @@ def gen_stop_word(file_input, searches=None, stops=None):
         stops = ['']
     if searches is None:
         searches = ['']
-    searches_vocab = set(word.lower() for word in searches)
-    stops_vocab = set(word.lower() for word in stops)
+
+    def parse_lines(f):
+        searches_vocab = set(word.lower() for word in searches)
+        stops_vocab = set(word.lower() for word in stops)
+        for line in f:
+            string = set(line.translate(str.maketrans('', '', punctuation)).strip().lower().split())
+
+            if stops_vocab & string:
+                continue
+
+            if searches_vocab & string:
+                yield line
 
     if isinstance(file_input, str):
-        file = open(file_input, 'r', encoding='utf-8')
+        with open(file_input, 'r', encoding='utf-8') as file:
+            yield from parse_lines(file)
     else:
-        file = file_input
-
-    for line in file:
-        string = set(line.translate(str.maketrans('', '', punctuation)).strip().lower().split())
-
-        if stops_vocab & string:
-            continue
-
-        if searches_vocab & string:
-            yield line
-
-    file.close()
+        yield from parse_lines(file_input)
 
 
 for i in gen_stop_word('lermontov.txt', searches=['голубом', 'скрыпит']):
