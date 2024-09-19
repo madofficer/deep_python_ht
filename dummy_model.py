@@ -1,6 +1,3 @@
-from random import random
-
-
 class DummyModel:
     def predict(self, message: str) -> float:
         raise NotImplemented

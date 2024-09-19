@@ -1,8 +1,11 @@
 from string import punctuation
-from typing import List
 
 
-def gen_stop_word(file_input, searches: List[str], stops: List[str]):
+def gen_stop_word(file_input, searches=None, stops=None):
+    if stops is None:
+        stops = ['']
+    if searches is None:
+        searches = ['']
     searches_vocab = set(word.lower() for word in searches)
     stops_vocab = set(word.lower() for word in stops)
 
@@ -23,7 +26,7 @@ def gen_stop_word(file_input, searches: List[str], stops: List[str]):
     file.close()
 
 
-for i in gen_stop_word('lermontov.txt', searches=['голубом', 'скрыпит'], stops=['']):
+for i in gen_stop_word('lermontov.txt', searches=['голубом', 'скрыпит']):
     print(i)
 
 print('-' * 100)
