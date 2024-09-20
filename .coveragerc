@@ -1,0 +1,12 @@
+[report]
+exclude_also =
+    logger\.info\(.*\)
+    if __name__ == .__main__.:
+fail_under = 10
+precision = 2
+show_missing = true
+
+[run]
+omit =
+    .venv/
+    *_test.py
