@@ -24,6 +24,10 @@ jobs:
     
     - name: Check flake8
       run: flake8 .
+    
+    - name: Check pylint
+        if: ${{ always() }}
+        run: pylint ./*/*.py
 
     - name: Run tests with pytest and check coverage
       run: |
