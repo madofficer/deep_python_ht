@@ -8,7 +8,8 @@ def predict_message_mood(
 ) -> str:
     if not isinstance(message, str):
         raise TypeError(
-            f"Argument 'message' must be str," f" not {type(message).__name__}"
+            f"Argument 'message' must be str,"
+            f" not {type(message).__name__}"
         )
     if not isinstance(bad_thresholds, float):
         raise TypeError(
