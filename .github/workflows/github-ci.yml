@@ -3,16 +3,11 @@ name: github actions config
 on: [push, pull_request]
 
 jobs:
-  build:
+  validate_homeworks:
+    name: Validate all homeworks
     runs-on: ubuntu-latest
 
     steps:
-
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-
-
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5.2.0
         with:
@@ -28,10 +23,10 @@ jobs:
       - name: Check pylint
         if: ${{ always() }}
         run: pylint ./*/*.py
-          
+
       - name: Check tests with pytest
-          if: ${{ always() }}
-          run: coverage run -m pytest .
+        if: ${{ always() }}
+        run: coverage run -m pytest .
 
       - name: Check test coverage
-          run: coverage report -m
+        run: coverage report -m
