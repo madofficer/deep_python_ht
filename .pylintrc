@@ -1,8 +1,12 @@
 [MASTER]
 disable=
-    C0114, # missing-module-docstring
-    C0115,
-    C0116,
+    C0114,  # missing-module-docstring
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+    E0401,   # Unable to import
+    C0325,   # Unnecessary parens after 'not' keyword
+    R0903,   # Too few public methods
+    R1705    # Unnecessary "elif" after "return"
 
 [FORMAT]
 max-line-length=80
