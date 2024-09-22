@@ -39,8 +39,8 @@ jobs:
         python -m unittest discover
         
     - name: Check tests with pytest
-        if: ${{ always() }}
+        # if: ${{ always() }}
         run: coverage run -m pytest .
 
-      - name: Check test coverage
+    - name: Check test coverage
         run: coverage report -m
