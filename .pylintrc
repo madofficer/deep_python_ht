@@ -10,3 +10,7 @@ disable=
 
 [FORMAT]
 max-line-length=80
+[VARIABLES]
+# Allow snake_case for variable names
+variable-rgx=^[a-z][a-z0-9_]*$  # Regex for variable names
+variable-name-hint=^[a-z][a-z0-9_]*$  # Hint for variable names
