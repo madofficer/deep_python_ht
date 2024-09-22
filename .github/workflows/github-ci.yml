@@ -35,7 +35,7 @@ jobs:
         pip install -r requirements.txt
         
     - name: Check tests with pytest
-        if: ${{ always() }}
+        # if: ${{ always() }}
         run: coverage run -m pytest .
 
     - name: Check test coverage
