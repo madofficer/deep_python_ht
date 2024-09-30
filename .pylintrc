@@ -4,13 +4,7 @@ disable=
     C0115,  # missing-class-docstring
     C0116,  # missing-function-docstring
     E0401,   # Unable to import
-    C0325,   # Unnecessary parens after 'not' keyword
     R0903,   # Too few public methods
-    R1705    # Unnecessary "elif" after "return"
 
 [FORMAT]
 max-line-length=80
-[VARIABLES]
-# Allow snake_case for variable names
-variable-rgx=^[a-z][a-z0-9_]*$  # Regex for variable names
-variable-name-hint=^[a-z][a-z0-9_]*$  # Hint for variable names
