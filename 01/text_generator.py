@@ -33,11 +33,11 @@ def gen_stop_word(file_input, searches=None, stops=None):
 
 if __name__ == "__main__":
 
-    for i in gen_stop_word("lermontov.txt", searches=["голубом", "скрыпит"]):
+    for i in gen_stop_word("../lermontov.txt", searches=["голубом", "скрыпит"]):
         print(i)
 
     print("-" * 100)
 
-    with open("lermontov.txt", "r", encoding="utf-8") as lermont:
+    with open("../lermontov.txt", "r", encoding="utf-8") as lermont:
         for i in gen_stop_word(lermont, ["покой", "парус", "увы"], ["ветер"]):
             print(i)
