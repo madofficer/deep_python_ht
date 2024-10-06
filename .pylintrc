@@ -10,7 +10,8 @@ disable=
     R1720,   #unnecessery else
     W0718,   # general exception
     R1705,   # unnecessary elif
-    W0613    # unused argument
+    W0613,   # unused argument
+    R1710    # return statement
 
 [FORMAT]
 max-line-length=80

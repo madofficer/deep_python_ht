@@ -25,7 +25,6 @@ def retry_deco(attempts=5, exceptions=None):
                             f"attempt: {attempt}, "
                             f"exception: {error.__class__.__name__}"
                         )
-                        raise
 
                     else:
                         print(
@@ -34,18 +33,6 @@ def retry_deco(attempts=5, exceptions=None):
                             f"exception: {error.__class__.__name__}"
                         )
 
-            raise error
-
         return wrapper
 
     return decorator
-
-
-if __name__ == "__main__":
-
-    @retry_deco(3)
-    def add(a, b):
-        return a + b
-
-    add(4, 2)
-    add(4, b=3)
