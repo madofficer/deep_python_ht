@@ -10,12 +10,14 @@ def process_json(
     callback: Callable[[str, str], None] | str = str,
 ) -> None:
 
-    if (required_keys is None or len(required_keys) == 0) or (tokens is None or len(tokens) == 0):
-        print('nothing to say..')
+    if (required_keys is None or len(required_keys) == 0) or (
+        tokens is None or len(tokens) == 0
+    ):
+        print("nothing to say..")
         return
 
     if callback is None:
-        callback = lambda k, t:  f"I found for you key: {k} and value: {t}"
+        callback = lambda k, t: f"I found for you key: {k} and value: {t}"
 
     try:
         data = json.loads(json_str)
@@ -50,9 +52,11 @@ if __name__ == "__main__":
         tokens_arg,
         lambda author, his_word: f"{author=}, {his_word=}",
     )
-    print('---')
-    process_json(json_string, None, None, lambda author, his_word: f"{author=}, {his_word=}")
-    print('---')
+    print("---")
+    process_json(
+        json_string, None, None, lambda author, his_word: f"{author=}, {his_word=}"
+    )
+    print("---")
     process_json(json_string, keys_arg, tokens_arg, None)
-    print('---')
+    print("---")
     process_json(json_string, None, None, None)
