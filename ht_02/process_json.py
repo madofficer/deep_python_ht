@@ -42,21 +42,22 @@ def process_json(
 
 if __name__ == "__main__":
     with open("poets.txt", "r", encoding="utf-8") as f:
-        json_string = " ".join(line.strip() for line in f.readlines())
+        JSON_STRING = " ".join(line.strip() for line in f.readlines())
 
     keys_arg = ["Anton_Chekhov", "Lev_Tolstoy", "Alexander_Pushkin"]
     tokens_arg = ["СЕРДЦЕ", "жизнь", "мЫ"]
     process_json(
-        json_string,
+        JSON_STRING,
         keys_arg,
         tokens_arg,
         lambda author, his_word: f"{author=}, {his_word=}",
     )
     print("---")
     process_json(
-        json_string, None, None, lambda author, his_word: f"{author=}, {his_word=}"
+        JSON_STRING, None, None,
+        lambda author, his_word: f"{author=}, {his_word=}"
     )
     print("---")
-    process_json(json_string, keys_arg, tokens_arg, None)
+    process_json(JSON_STRING, keys_arg, tokens_arg, None)
     print("---")
-    process_json(json_string, None, None, None)
+    process_json(JSON_STRING, None, None, None)

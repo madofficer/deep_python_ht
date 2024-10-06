@@ -12,19 +12,26 @@ def retry_deco(attempts=5, exceptions=None):
                 try:
                     result = func(*args, **kwargs)
                     print(
-                        f"Running: {func.__name__}, args:{args}, kwargs: {kwargs}, attempt:{attempt}"
+                        f"Running: {func.__name__}, args:{args},"
+                        f" kwargs: {kwargs},"
+                        f" attempt:{attempt}"
                     )
                     return result
                 except Exception as error:
                     if isinstance(error, tuple(exceptions)):
                         print(
-                            f"Running:{func.__name__}, args: {args}, kwargs: {kwargs}, attempt: {attempt}, exception: {error.__class__.__name__}"
+                            f"Running:{func.__name__}, args: {args}, "
+                            f"kwargs: {kwargs}, "
+                            f"attempt: {attempt}, "
+                            f"exception: {error.__class__.__name__}"
                         )
                         raise
 
                     else:
                         print(
-                            f"Running:{func.__name__}, args: {args}, kwargs: {kwargs}, attempt: {attempt}, exception: {error.__class__.__name__}"
+                            f"Running:{func.__name__}, args: {args}, "
+                            f"kwargs: {kwargs}, attempt: {attempt}, "
+                            f"exception: {error.__class__.__name__}"
                         )
 
             raise error

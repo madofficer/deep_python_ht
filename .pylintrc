@@ -5,6 +5,11 @@ disable=
     C0116,  # missing-function-docstring
     E0401,   # Unable to import
     R0903,   # Too few public methods
+    W0611,   # import usage
+    C3001,   # lambda assignment
+    R1720,   #unnecessery else
+    W0718,   # general exception
 
 [FORMAT]
 max-line-length=80
+variable-rgx=[a-z_][a-z0-9_]*$

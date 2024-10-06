@@ -1,6 +1,5 @@
 import json
 import unittest
-import sys
 from unittest.mock import patch
 from io import StringIO
 from process_json import process_json
@@ -27,7 +26,7 @@ class TestProcessJson(unittest.TestCase):
             "author='Anton_Chekhov', his_word='жизнь'",
             "author='Alexander_Pushkin', his_word='сердце'",
         ]
-        self.expected_None = "nothing to say.."
+        self.expected_none = "nothing to say.."
 
     @patch("sys.stdout", new_callable=StringIO)
     def test_output(self, mock_stdout):
@@ -38,7 +37,8 @@ class TestProcessJson(unittest.TestCase):
 
     @patch("sys.stdout", new_callable=StringIO)
     def test_invalid_str(self, mock_stdout):
-        process_json(self.invalid_json_str, self.keys_args, self.token_args, self.lmd)
+        process_json(self.invalid_json_str, self.keys_args,
+                     self.token_args, self.lmd)
         proc_output = mock_stdout.getvalue().strip()
 
         self.assertTrue(proc_output.startswith("json parsing error"))
@@ -48,14 +48,14 @@ class TestProcessJson(unittest.TestCase):
         process_json(self.json_str, None, self.token_args, self.lmd)
         proc_output = mock_stdout.getvalue().strip()
 
-        self.assertEqual(proc_output, self.expected_None)
+        self.assertEqual(proc_output, self.expected_none)
 
     @patch("sys.stdout", new_callable=StringIO)
     def test_no_tokens(self, mock_stdout):
         process_json(self.json_str, self.keys_args, None, self.lmd)
         proc_output = mock_stdout.getvalue().strip()
 
-        self.assertEqual(proc_output, self.expected_None)
+        self.assertEqual(proc_output, self.expected_none)
 
     @patch("sys.stdout", new_callable=StringIO)
     def test_no_func(self, mock_stdout):
@@ -73,7 +73,7 @@ class TestProcessJson(unittest.TestCase):
         process_json(self.json_str, None, None, None)
         proc_output = mock_stdout.getvalue().strip()
 
-        self.assertEqual(proc_output, self.expected_None)
+        self.assertEqual(proc_output, self.expected_none)
 
     @patch("sys.stdout", new_callable=StringIO)
     def test_key_register(self, mock_stdout):
@@ -98,17 +98,17 @@ class TestProcessJson(unittest.TestCase):
         process_json(self.json_str, [], self.token_args, self.lmd)
         proc_output = mock_stdout.getvalue().strip()
 
-        self.assertEqual(proc_output, self.expected_None)
+        self.assertEqual(proc_output, self.expected_none)
 
     @patch("sys.stdout", new_callable=StringIO)
     def test_empty_tokens(self, mock_stdout):
         process_json(self.json_str, self.token_args, [], self.lmd)
         proc_output = mock_stdout.getvalue().strip()
 
-        self.assertEqual(proc_output, self.expected_None)
+        self.assertEqual(proc_output, self.expected_none)
 
     @patch("sys.stdout", new_callable=StringIO)
-    def test_callback_with_exception(self, mock_stdout):
+    def test_callback_with_exception(self):
         def faulty_callback(author, his_word):
             raise ValueError("Intentional Error")
 
