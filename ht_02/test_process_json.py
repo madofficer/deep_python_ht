@@ -108,7 +108,7 @@ class TestProcessJson(unittest.TestCase):
         self.assertEqual(proc_output, self.expected_none)
 
     @patch("sys.stdout", new_callable=StringIO)
-    def test_callback_with_exception(self):
+    def test_callback_with_exception(self, mock_stdout):
         def faulty_callback(author, his_word):
             raise ValueError("Intentional Error")
 
