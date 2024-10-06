@@ -26,12 +26,3 @@ def timeit_last_k(k):
 def sleeper(n):
     time.sleep(n)
     return n
-
-
-sleeper(4)
-
-sleeper(10)
-
-sleeper(20)
-
-

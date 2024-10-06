@@ -9,4 +9,4 @@ show_missing = true
 [run]
 omit =
     .venv/
-    *_test.py
+    *test_.py
