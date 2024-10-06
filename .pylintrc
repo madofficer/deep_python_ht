@@ -9,6 +9,7 @@ disable=
     C3001,   # lambda assignment
     R1720,   #unnecessery else
     W0718,   # general exception
+    R1705    # unnecessary elif
 
 [FORMAT]
 max-line-length=80
