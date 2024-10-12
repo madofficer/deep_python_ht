@@ -1,4 +1,15 @@
+from types import NoneType
+
+
 class CustomList(list):
+    def __init__(self, iterable=None):
+        if iterable is None:
+            iterable = []
+        elif not isinstance(iterable, (list, tuple, set, frozenset, dict)):
+            raise TypeError(f"Expected types are: 'list', 'tuple', 'set', 'frozenset', 'dict', got {type(iterable).__name__} instead")
+        if not all(isinstance(i, (int, float)) for i in iterable):
+            raise TypeError(f"All elements of the iterable object must be 'int' or 'float'")
+        super().__init__(iterable)
 
     def __str__(self):
         return f'{list(self)} = {sum(self)}'
@@ -25,18 +36,9 @@ class CustomList(list):
 
     def __sub__(self, other):
         if isinstance(other, (int, float)):
-            return CustomList([i - other for i in self])
+            return self + (-other)
         elif isinstance(other, list):
-            max_len = max(len(other), len(self))
-            res = [0] * max_len
-            for i in range(max_len):
-                if i >= len(self):
-                    res[i] -= other[i]
-                elif i >= len(other):
-                    res[i] = self[i]
-                else:
-                    res[i] = self[i] - other[i]
-            return CustomList(res)
+            return self + [-i for i in other]
         else:
             raise TypeError(f"Unsupported operand type(s) for -: 'CustomList' and '{type(other).__name__}")
 
@@ -44,16 +46,7 @@ class CustomList(list):
         if isinstance(other, (int, float)):
             return CustomList([other - i for i in self])
         elif isinstance(other, list):
-            max_len = max(len(other), len(self))
-            res = [0] * max_len
-            for i in range(max_len):
-                if i >= len(other):
-                    res[i] -= self[i]
-                elif i >= len(self):
-                    res[i] = other[i]
-                else:
-                    res[i] = other[i] - self[i]
-            return CustomList(res)
+            return CustomList([-i for i in self]) + other
         else:
             raise TypeError(f"Unsupported operand type(s) for -: '{type(other).__name__}' and 'CustomList'")
 
@@ -103,4 +96,11 @@ if __name__ == '__main__':
     print(a + b)
     print(a - b)
     print(a > b)
+    print(a + (-1))
+    print(-1 - a)
+    b = CustomList((1, 2, 3))
+    c = CustomList({1, 2, 2, 5})
+    print(c)
+    # d = CustomList('45345')
+    # print(d)
 
