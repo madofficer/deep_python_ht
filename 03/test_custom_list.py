@@ -1,5 +1,4 @@
 import unittest
-from logging import setLogRecordFactory
 from unittest.mock import patch
 from io import StringIO
 from custom_list import CustomList
