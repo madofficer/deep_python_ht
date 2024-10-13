@@ -53,7 +53,7 @@ class CustomList(list):
     def __rsub__(self, other):
         if isinstance(other, (int, float)):
             return CustomList([other - i for i in self])
-        elif isinstance(other, list):
+        elif isinstance(other, (list, tuple)):
             return CustomList([-i for i in self]) + other
         else:
             raise TypeError(

@@ -8,7 +8,7 @@ from custom_list import CustomList
 class TestCustomList(unittest.TestCase):
 
     def setUp(self):
-        self.a_custom = CustomList([5, 1, 3, 7])
+        self.a_custom = CustomList([5, 1,   3, 7])
         self.a_list = [5, 1, 3, 7]
         self.b_custom = CustomList([1, 2, 7])
         self.b_list = [1, 2, 7]
@@ -200,6 +200,104 @@ class TestCustomList(unittest.TestCase):
         self.assertEqual(res, CustomList([1, 1, 4, 4.5]))
         res = self.a_custom - (1, 1)
         self.assertEqual(res, CustomList([4, 0, 3, 7]))
+
+    def test_sub_invalid(self):
+        with self.assertRaises(TypeError):
+            res = self.a_custom - "564"
+        with self.assertRaises(TypeError):
+            res = self.b_custom - (5, ())
+
+    def test_rsub_int_pos(self):
+        res = 10 - self.a_custom
+        self.assertEqual(res, CustomList([5, 9, 7, 3]))
+        res = 15 - self.b_custom
+        self.assertEqual(res, CustomList([14, 13, 8]))
+
+    def test_rsub_int_non_pos(self):
+        res = 0 - self.a_custom
+        self.assertEqual(res, CustomList([-5, -1, -3, -7]))
+        res = -5 - self.a_custom
+        self.assertEqual(res, CustomList([-10, -6, -8, -12]))
+        res = -100 - self.b_custom
+        self.assertEqual(res, CustomList([-101, -102, -107]))
+
+    def test_rsub_list(self):
+        res = [10, 10] - self.a_custom
+        self.assertEqual(res, CustomList([5, 9, -3, -7]))
+        res = [10, 10, 10] - self.b_custom
+        self.assertEqual(res, CustomList([9, 8, 3]))
+        res = [1] - self.a_custom
+        self.assertEqual(res, CustomList([-4, -1, -3, -7]))
+
+    def test_rsub_custom_list(self):
+        res = self.b_list - self.a_custom
+        self.assertEqual(res, CustomList([-4, 1, 4, -7]))
+        res = self.a_list - self.b_custom
+        self.assertEqual(res, CustomList([4, -1, -4, 7]))
+        res = (10, 20) - self.a_custom
+        self.assertEqual(res, CustomList([5, 19, -3, -7]))
+        res = [] - self.a_custom
+        self.assertEqual(res, CustomList([-5, -1, -3, -7]))
+        res = [10, 20] - CustomList([])
+        self.assertEqual(res, CustomList([10, 20]))
+
+    def test_rsub_invalid(self):
+        with self.assertRaises(TypeError):
+            res = "test_string" - self.a_custom
+        with self.assertRaises(TypeError):
+            res = (5, "str") - self.b_custom
+        with self.assertRaises(TypeError):
+            res = {1, 2, 3} - self.a_custom
+        with self.assertRaises(TypeError):
+            res = {1: 2, 3: 4} - self.b_custom
+        with self.assertRaises(TypeError):
+            res = [(5, 6), {}] - self.b_custom
+            print(res)
+
+    def test_eq_operator(self):
+
+        self.assertTrue(self.a_custom == CustomList((7, 3, 5, 1)))
+        self.assertFalse(self.a_custom == self.b_custom)
+        self.assertTrue(self.a_custom == CustomList((5, 1, 10)))
+        self.assertFalse(self.a_custom == CustomList([10, 10, 10]))
+        self.assertFalse(self.a_custom == CustomList([]))
+
+    def test_ne_operator(self):
+        self.assertTrue(self.a_custom != self.b_custom)
+        self.assertTrue(self.a_custom == CustomList({5, 1, 10}))
+        self.assertTrue(self.a_custom != CustomList([10, 10, 10]))
+        self.assertFalse(self.a_custom != CustomList([5, 1, 3, 7]))
+        self.assertTrue(self.a_custom != CustomList([]))
+
+    def test_gt_operator(self):
+        self.assertTrue(self.a_custom > self.b_custom)
+        self.assertFalse(self.a_custom > CustomList([23.45, 1.0]))
+        self.assertTrue(self.a_custom > CustomList([1, 1, 1]))
+        self.assertFalse(self.a_custom > CustomList([10.1, 10, 10]))
+        self.assertTrue(self.a_custom > CustomList([]))
+
+    def test_ge_operator(self):
+        self.assertTrue(self.a_custom >= CustomList((2.4, 0, 1, 0.5)))
+        self.assertFalse(self.a_custom >= CustomList((111.2,)))
+        self.assertTrue(self.a_custom >= CustomList([5, 1, 3, 7]))
+        self.assertFalse(self.a_custom >= CustomList([10, 10, 10]))
+        self.assertTrue(self.a_custom >= CustomList([]))
+
+    def test_lt_operator(self):
+        self.assertTrue(self.b_custom < self.a_custom)
+        self.assertFalse(CustomList([1, 200]) < self.a_custom)
+        self.assertTrue(self.a_custom < CustomList([10, 10, 10]))
+        self.assertFalse(self.a_custom < CustomList([1, 1, 1]))
+
+        self.assertFalse(self.a_custom < CustomList([]))
+
+    def test_le_operator(self):
+        self.assertTrue(self.a_custom <= CustomList(({1:1, 3:3, 5:5, 7:0})))
+        self.assertTrue(self.b_custom <= self.a_custom)
+        self.assertFalse(CustomList({53, 1000}) <= self.a_custom)
+        self.assertTrue(self.a_custom <= CustomList([10, 10, 10]))
+        self.assertFalse(self.a_custom <= CustomList([1, 1, 1]))
+        self.assertFalse(self.a_custom <= CustomList([]))
 
 
 if __name__ == "__main__":
