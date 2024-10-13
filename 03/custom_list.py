@@ -1,23 +1,25 @@
-from types import NoneType
-
-
 class CustomList(list):
     def __init__(self, iterable=None):
         if iterable is None:
             iterable = []
         elif not isinstance(iterable, (list, tuple, set, frozenset, dict)):
-            raise TypeError(f"Expected types are: 'list', 'tuple', 'set', 'frozenset', 'dict', got {type(iterable).__name__} instead")
+            raise TypeError(
+                f"Expected types are: 'list', 'tuple', 'set', "
+                f"'frozenset', 'dict', got {type(iterable).__name__} instead"
+            )
         if not all(isinstance(i, (int, float)) for i in iterable):
-            raise TypeError(f"All elements of the iterable object must be 'int' or 'float'")
+            raise TypeError(
+                "All elements of the iterable object must be 'int' or 'float'"
+            )
         super().__init__(iterable)
 
     def __str__(self):
-        return f'{list(self)} = {sum(self)}'
+        return f"{list(self)} = {sum(self)}"
 
     def __add__(self, other):
         if isinstance(other, (int, float)):
             return CustomList([i + other for i in self])
-        elif isinstance(other, list):
+        elif isinstance(other, (list, tuple)):
             max_len = max(len(self), len(other))
             res = [0] * max_len
             for i in range(max_len):
@@ -29,7 +31,10 @@ class CustomList(list):
                     res[i] = self[i] + other[i]
             return CustomList(res)
         else:
-            raise TypeError(f"Unsupported operand type(s) for +: 'CustomList' and '{type(other).__name__}'")
+            raise TypeError(
+                f"Unsupported operand type(s) for +: 'CustomList' "
+                f"and '{type(other).__name__}'"
+            )
 
     def __radd__(self, other):
         return self + other
@@ -37,10 +42,13 @@ class CustomList(list):
     def __sub__(self, other):
         if isinstance(other, (int, float)):
             return self + (-other)
-        elif isinstance(other, list):
+        elif isinstance(other, (list, tuple)):
             return self + [-i for i in other]
         else:
-            raise TypeError(f"Unsupported operand type(s) for -: 'CustomList' and '{type(other).__name__}")
+            raise TypeError(
+                f"Unsupported operand type(s) for -: 'CustomList' "
+                f"and '{type(other).__name__}"
+            )
 
     def __rsub__(self, other):
         if isinstance(other, (int, float)):
@@ -48,7 +56,10 @@ class CustomList(list):
         elif isinstance(other, list):
             return CustomList([-i for i in self]) + other
         else:
-            raise TypeError(f"Unsupported operand type(s) for -: '{type(other).__name__}' and 'CustomList'")
+            raise TypeError(
+                f"Unsupported operand type(s) for -: '{type(other).__name__}' "
+                f"and 'CustomList'"
+            )
 
     def __eq__(self, other):
         return sum(self) == sum(other)
@@ -69,15 +80,7 @@ class CustomList(list):
         return sum(self) < sum(other)
 
 
-
-
-
-
-
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     a = CustomList()
     a.append(100)
     a.append(1000)
@@ -99,8 +102,8 @@ if __name__ == '__main__':
     print(a + (-1))
     print(-1 - a)
     b = CustomList((1, 2, 3))
-    c = CustomList({1, 2, 2, 5})
+    c = CustomList({1, 2, 5})
     print(c)
+    print(b + (1, 2, 3))
     # d = CustomList('45345')
     # print(d)
-
