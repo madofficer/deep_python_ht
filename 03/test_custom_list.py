@@ -8,7 +8,7 @@ from custom_list import CustomList
 class TestCustomList(unittest.TestCase):
 
     def setUp(self):
-        self.a_custom = CustomList([5, 1,   3, 7])
+        self.a_custom = CustomList([5, 1, 3, 7])
         self.a_list = [5, 1, 3, 7]
         self.b_custom = CustomList([1, 2, 7])
         self.b_list = [1, 2, 7]
@@ -38,7 +38,7 @@ class TestCustomList(unittest.TestCase):
         print(self.a_custom)
         self.assertEqual(
             mock_stdout.getvalue().strip(),
-    f"{self.a_list} = {sum(self.a_list)}"
+            f"{self.a_list} = {sum(self.a_list)}"
         )
 
     def test_add_int_pos(self):
@@ -206,6 +206,7 @@ class TestCustomList(unittest.TestCase):
             res = self.a_custom - "564"
         with self.assertRaises(TypeError):
             res = self.b_custom - (5, ())
+            print(res)
 
     def test_rsub_int_pos(self):
         res = 10 - self.a_custom
@@ -288,11 +289,10 @@ class TestCustomList(unittest.TestCase):
         self.assertFalse(CustomList([1, 200]) < self.a_custom)
         self.assertTrue(self.a_custom < CustomList([10, 10, 10]))
         self.assertFalse(self.a_custom < CustomList([1, 1, 1]))
-
         self.assertFalse(self.a_custom < CustomList([]))
 
     def test_le_operator(self):
-        self.assertTrue(self.a_custom <= CustomList(({1:1, 3:3, 5:5, 7:0})))
+        self.assertTrue(self.a_custom <= CustomList(({1: 1, 3: 3, 5: 5, 7: 0})))
         self.assertTrue(self.b_custom <= self.a_custom)
         self.assertFalse(CustomList({53, 1000}) <= self.a_custom)
         self.assertTrue(self.a_custom <= CustomList([10, 10, 10]))
