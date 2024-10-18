@@ -32,22 +32,22 @@ def gen_stop_word(file_input, searches=None, stops=None):
         yield from parse_lines(file_input)
 
 
-if __name__ == "__main__":
-
-    for i in gen_stop_word("lermontov.txt", searches=["голубом", "скрыпит"]):
-        print(i)
-
-    print("-" * 100)
-
-    with open("lermontov.txt", "r", encoding="utf-8") as lermont:
-        for i in gen_stop_word(lermont, ["покой", "парус", "увы"], ["ветер"]):
-            print(i)
-
-    text = "\nа Роза упала на лапу Азора\nSATOR AREPO TENET OPERA ROTAS"
-    print(text)
-    file = StringIO(text)
-
-    gen = gen_stop_word(file, ['SATOR'], ["а Роза упала на лапу Азора"])
-    words = list(gen)
-    words = [word.strip() for word in words]
-    print(words)
+# if __name__ == "__main__":
+#
+#     for i in gen_stop_word("lermontov.txt", searches=["голубом", "скрыпит"]):
+#         print(i)
+#
+#     print("-" * 100)
+#
+#     with open("lermontov.txt", "r", encoding="utf-8") as lermont:
+#         for i in gen_stop_word(lermont, ["покой", "парус", "увы"], ["ветер"]):
+#             print(i)
+#
+#     text = "\nа Роза упала на лапу Азора\nSATOR AREPO TENET OPERA ROTAS"
+#     print(text)
+#     file = StringIO(text)
+#
+#     gen = gen_stop_word(file, ['SATOR'], ["а Роза упала на лапу Азора"])
+#     words = list(gen)
+#     words = [word.strip() for word in words]
+#     print(words)
