@@ -2,7 +2,7 @@ class CustomMeta(type):
     def __new__(cls, name, bases, attrs):
         new_attrs = {}
         for attr_name, attr_value in attrs.items():
-            if not attr_name.startswith('__'):
+            if not attr_name.startswith("__"):
                 new_attrs[f"custom_{attr_name}"] = attr_value
             else:
                 new_attrs[attr_name] = attr_value
@@ -17,12 +17,12 @@ class CustomMeta(type):
 
         return cls_obj
 
+
 class CustomClass(metaclass=CustomMeta):
     x = 50
     attr1 = "val1"
     _protected_attr = "protected_val"
     __private_attr = "private_val"
-
 
     def __init__(self, val=99):
         self.val = val
@@ -30,15 +30,17 @@ class CustomClass(metaclass=CustomMeta):
     def line(self):
         return 100
 
-    def __private(self):
-        return 234567
+    def _protected_line(self):
+        return 200
+
+    def __private_line(self):
+        return 300
 
     def __str__(self):
         return "Custom_by_metaclass"
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     ex = CustomClass()
     ex.custom_line()
     print(ex.custom_line())
@@ -50,12 +52,4 @@ if __name__ == '__main__':
     ex.__newAttr = 52
     ex._n_attr = 100
     print(1)
-    print(ex.custom___newAttr)
-    print(ex.custom__CustomClass__private())
-    print(ex.custom__n_attr)
-    print(ex.custom__protected_attr)
-    print(ex.custom__CustomClass__private_attr)
-    print(ex.custom___newAttr)
-    ex.__new_Private = 1
-    print(ex.custom___new_Private)
-
+    print(ex.custom__CustomClass__private_line())
