@@ -84,13 +84,13 @@ class TestCustomMeta(unittest.TestCase):
 
         self.assertTrue(hasattr(self.obj, "custom__protected_line"))
         self.assertFalse(hasattr(self.obj, "_protected_line"))
-        self.assertTrue(self.obj.custom__protected_line, 200)
+        self.assertEqual(self.obj.custom__protected_line(), 200)
         with self.assertRaises(AttributeError):
             print(self.obj.line())
 
         self.assertTrue(hasattr(self.obj, "custom__CustomClass__private_line"))
         self.assertFalse(hasattr(self.obj, "_CustomClass__private_line"))
-        self.assertTrue(self.obj.custom__CustomClass__private_line, 200)
+        self.assertEqual(self.obj.custom__CustomClass__private_line(), 300)
         with self.assertRaises(AttributeError):
             print(self.obj._CustomClass__private_line())
 
