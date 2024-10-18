@@ -37,9 +37,12 @@ class TestCustomMeta(unittest.TestCase):
         with self.assertRaises(AttributeError):
             print(CustomClass._protected_attr)
 
-        self.assertTrue(hasattr(CustomClass, "custom__CustomClass__private_attr"))
-        self.assertFalse(hasattr(CustomClass, "_CustomClass__private_attr"))
-        self.assertEqual(CustomClass.custom__CustomClass__private_attr, "private_val")
+        self.assertTrue(hasattr(CustomClass,
+                                "custom__CustomClass__private_attr"))
+        self.assertFalse(hasattr(CustomClass,
+                                 "_CustomClass__private_attr"))
+        self.assertEqual(CustomClass.custom__CustomClass__private_attr,
+                         "private_val")
         with self.assertRaises(AttributeError):
             print(CustomClass._CustomClass__protected_attr)
 
@@ -66,9 +69,12 @@ class TestCustomMeta(unittest.TestCase):
             print(self.obj._n_protected_attr)
 
         setattr(self.obj, "__non_private_attr", "private_but_not")
-        self.assertTrue(hasattr(self.obj, "custom___non_private_attr"))
-        self.assertFalse(hasattr(self.obj, "__non_private_attr"))
-        self.assertFalse(hasattr(self.obj, "custom__CustomClass__non_private_attr"))
+        self.assertTrue(hasattr(self.obj,
+                                "custom___non_private_attr"))
+        self.assertFalse(hasattr(self.obj,
+                                 "__non_private_attr"))
+        self.assertFalse(hasattr(self.obj,
+                                 "custom__CustomClass__non_private_attr"))
         with self.assertRaises(AttributeError):
             print(self.obj._CustomClass__non_private_attr)
 
@@ -93,7 +99,6 @@ class TestCustomMeta(unittest.TestCase):
         self.assertEqual(self.obj.custom__CustomClass__private_line(), 300)
         with self.assertRaises(AttributeError):
             print(self.obj._CustomClass__private_line())
-
 
     def test_invalid_attr_name(self):
         with self.assertRaises(TypeError):

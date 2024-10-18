@@ -13,7 +13,14 @@ disable=
     W0613,   # unused argument
     R1710,   # return statement
     R0904,   # too many public methods
-    C0103    # snake_case
+    C0103,   # snake_case
+    E1003,   # Bad first argument 'cls_obj'
+    W0238,   # Unused private member
+    W0201,   # Attribute  defined outside __init__
+    E1101,   # Instance of class has no meth member
+    W0212,   # Access to a protected member
+    E0602,   #
+
 
 [FORMAT]
 max-line-length=80

@@ -1,5 +1,5 @@
 class CustomMeta(type):
-    def __new__(cls, name, bases, attrs):
+    def __new__(mcs, name, bases, attrs):
         new_attrs = {}
         for attr_name, attr_value in attrs.items():
             if not attr_name.startswith("__"):
@@ -7,7 +7,7 @@ class CustomMeta(type):
             else:
                 new_attrs[attr_name] = attr_value
 
-        cls_obj = super().__new__(cls, name, bases, new_attrs)
+        cls_obj = super().__new__(mcs, name, bases, new_attrs)
 
         def custom_setattr(self, key, value):
             renamed_key = f"custom_{key}"
@@ -51,5 +51,4 @@ if __name__ == "__main__":
     print(str(ex))
     ex.__newAttr = 52
     ex._n_attr = 100
-    print(1)
     print(ex.custom__CustomClass__private_line())
