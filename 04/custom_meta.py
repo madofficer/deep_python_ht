@@ -40,15 +40,15 @@ class CustomClass(metaclass=CustomMeta):
         return "Custom_by_metaclass"
 
 
-if __name__ == "__main__":
-    ex = CustomClass()
-    ex.custom_line()
-    print(ex.custom_line())
-    print(ex)
-    ex.n_attr = 100
-    print(ex.custom_n_attr)
-    print(ex.custom_x)
-    print(str(ex))
-    ex.__newAttr = 52
-    ex._n_attr = 100
-    print(ex.custom__CustomClass__private_line())
+# if __name__ == "__main__":
+#     ex = CustomClass()
+#     ex.custom_line()
+#     print(ex.custom_line())
+#     print(ex)
+#     ex.n_attr = 100
+#     print(ex.custom_n_attr)
+#     print(ex.custom_x)
+#     print(str(ex))
+#     ex.__newAttr = 52
+#     ex._n_attr = 100
+#     print(ex.custom__CustomClass__private_line())

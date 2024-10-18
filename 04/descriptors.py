@@ -51,6 +51,6 @@ class Data:
         self.price = price
 
 
-if __name__ == "__main__":
-    data = Data(1, "Test Item", 100)
-    print(data.num, data.name, data.price)
+# if __name__ == "__main__":
+#     data = Data(1, "Test Item", 100)
+#     print(data.num, data.name, data.price)
