@@ -21,20 +21,23 @@ class BaseDescriptor:
 class Integer(BaseDescriptor):
     def validate(self, value):
         if not isinstance(value, int):
-            raise ValueError(f"Expected integer for '{self.name}', got {type(value).__name__}")
+            raise ValueError(f"Expected integer for '{self.name}', "
+                             f"got {type(value).__name__}")
 
 
 class String(BaseDescriptor):
     def validate(self, value):
         if not isinstance(value, str):
-            raise ValueError(f"Expected string for '{self.name}', got {type(value).__name__}")
+            raise ValueError(f"Expected string for '{self.name}', "
+                             f"got {type(value).__name__}")
 
 
 class PositiveInteger(Integer):
     def validate(self, value):
         super().validate(value)
         if value <= 0:
-            raise ValueError(f"Expected positive integer for '{self.name}', got {value}")
+            raise ValueError(f"Expected positive integer for "
+                             f"'{self.name}', got {value}")
 
 
 class Data:
@@ -46,6 +49,7 @@ class Data:
         self.num = num
         self.name = name
         self.price = price
+
 
 if __name__ == "__main__":
     data = Data(1, "Test Item", 100)

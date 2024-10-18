@@ -23,40 +23,48 @@ class TestDescriptors(unittest.TestCase):
     def test_set_invalid_integer(self):
         with self.assertRaises(ValueError) as context:
             self.data.num = "not an integer"
-        self.assertEqual(str(context.exception), "Expected integer for 'num', got str")
+        self.assertEqual(str(context.exception),
+                         "Expected integer for 'num', got str")
 
     def test_set_invalid_string(self):
         with self.assertRaises(ValueError) as context:
             self.data.name = 12345
-        self.assertEqual(str(context.exception), "Expected string for 'name', got int")
+        self.assertEqual(str(context.exception),
+                         "Expected string for 'name', got int")
 
     def test_set_negative_price(self):
         with self.assertRaises(ValueError) as context:
             self.data.price = -50
-        self.assertEqual(str(context.exception), "Expected positive integer for 'price', got -50")
+        self.assertEqual(str(context.exception),
+                         "Expected positive integer for 'price', got -50")
 
     def test_set_zero_price(self):
         with self.assertRaises(ValueError) as context:
             self.data.price = 0
-        self.assertEqual(str(context.exception), "Expected positive integer for 'price', got 0")
+        self.assertEqual(str(context.exception),
+                         "Expected positive integer for 'price', got 0")
 
     def test_delete_attribute(self):
         with self.assertRaises(AttributeError) as context:
             del self.data.num
-        self.assertEqual(str(context.exception), "Can't delete attribute 'num'")
+        self.assertEqual(str(context.exception),
+                         "Can't delete attribute 'num'")
 
     def test_invalid_initialization(self):
         with self.assertRaises(ValueError) as context:
             Data("not an integer", "Test Item", 100)
-        self.assertEqual(str(context.exception), "Expected integer for 'num', got str")
+        self.assertEqual(str(context.exception),
+                         "Expected integer for 'num', got str")
 
         with self.assertRaises(ValueError) as context:
             Data(1, 12345, 100)
-        self.assertEqual(str(context.exception), "Expected string for 'name', got int")
+        self.assertEqual(str(context.exception),
+                         "Expected string for 'name', got int")
 
         with self.assertRaises(ValueError) as context:
             Data(1, "Test Item", -10)
-        self.assertEqual(str(context.exception), "Expected positive integer for 'price', got -10")
+        self.assertEqual(str(context.exception),
+                         "Expected positive integer for 'price', got -10")
 
     def test_reassigning_valid_values(self):
         self.data.num = 5
