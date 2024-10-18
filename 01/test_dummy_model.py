@@ -19,15 +19,18 @@ class TestModel(unittest.TestCase):
         mock_prediction.assert_called_with(self.good_message)
 
         mock_prediction.return_value = 0.81
-        self.assertEqual(predict_message_mood(self.good_message, 0.34, 0.77), "отл")
+        self.assertEqual(predict_message_mood(self.good_message,
+                                              0.34, 0.77), "отл")
         mock_prediction.assert_called_with(self.good_message)
 
         mock_prediction.return_value = 0.94345
-        self.assertEqual(predict_message_mood(self.good_message, 0.5, 0.6), "отл")
+        self.assertEqual(predict_message_mood(self.good_message, 0.5, 0.6),
+                         "отл")
         mock_prediction.assert_called_with(self.good_message)
 
         mock_prediction.return_value = 0.456
-        self.assertEqual(predict_message_mood(self.good_message, 0.1, 0.455), "отл")
+        self.assertEqual(predict_message_mood(self.good_message, 0.1, 0.455),
+                         "отл")
         mock_prediction.assert_called_with(self.good_message)
 
     @patch("dummy_model.DummyModel.predict")
@@ -64,15 +67,18 @@ class TestModel(unittest.TestCase):
         mock_prediction.assert_called_with(self.bad_message)
 
         mock_prediction.return_value = 0.23
-        self.assertEqual(predict_message_mood(self.bad_message, 0.24, 0.9), "неуд")
+        self.assertEqual(predict_message_mood(self.bad_message, 0.24, 0.9),
+                         "неуд")
         mock_prediction.assert_called_with(self.bad_message)
 
         mock_prediction.return_value = 0.234
-        self.assertEqual(predict_message_mood(self.bad_message, 0.235, 0.7), "неуд")
+        self.assertEqual(predict_message_mood(self.bad_message, 0.235, 0.7),
+                         "неуд")
         mock_prediction.assert_called_with(self.bad_message)
 
         mock_prediction.return_value = 0.1
-        self.assertEqual(predict_message_mood(self.bad_message, 0.1234, 0.4), "неуд")
+        self.assertEqual(predict_message_mood(self.bad_message, 0.1234, 0.4),
+                         "неуд")
         mock_prediction.assert_called_with(self.bad_message)
 
     @patch("dummy_model.DummyModel.predict")
@@ -116,7 +122,8 @@ class TestModel(unittest.TestCase):
     @patch("dummy_model.DummyModel.predict")
     def test_predict_message_mood_on_threshold(self, mock_prediction):
         mock_prediction.return_value = 0.8
-        self.assertEqual(predict_message_mood(self.mid_message, 0.3, 0.8), "норм")
+        self.assertEqual(predict_message_mood(self.mid_message, 0.3, 0.8),
+                         "норм")
         mock_prediction.assert_called_with(self.mid_message)
 
         mock_prediction.return_value = 0.3

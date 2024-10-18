@@ -23,7 +23,8 @@ class TestTextGenerator(unittest.TestCase):
         self.assertEqual(words, [])
 
     def test_exact_match_search(self):
-        gen = gen_stop_word(self.file, ["SATOR", "AREPO", "TENET", "OPERA", "ROTAS"], [])
+        gen = gen_stop_word(self.file, ["SATOR", "AREPO", "TENET",
+                                        "OPERA", "ROTAS"], [])
         words = list(gen)
         words = [word.strip("\n") for word in words]
         self.assertEqual(words, ["SATOR AREPO TENET OPERA ROTAS"])
@@ -34,13 +35,15 @@ class TestTextGenerator(unittest.TestCase):
         self.assertEqual(words, [])
 
     def test_exact_match_stop(self):
-        gen = gen_stop_word(self.file, ['SATOR'], ["а", "Роза", "упала", "на", "лапу", "Азора"])
+        gen = gen_stop_word(self.file, ['SATOR'], ["а", "Роза", "упала",
+                                                   "на", "лапу", "Азора"])
         words = list(gen)
         words = [word.strip() for word in words]
         self.assertEqual(words, ["SATOR AREPO TENET OPERA ROTAS"])
 
     def test_exact_match_stop_2(self):
-        gen = gen_stop_word(self.file, ['OPERA'], ["а Роза упала на лапу Азора"])
+        gen = gen_stop_word(self.file, ['OPERA'],
+                            ["а Роза упала на лапу Азора"])
         words = list(gen)
         words = [word.strip() for word in words]
         self.assertEqual(words, ["SATOR AREPO TENET OPERA ROTAS"])
