@@ -92,6 +92,32 @@ class TestTextGenerator(unittest.TestCase):
             words = [word.strip() for word in words]
             self.assertEqual(words, ["а Роза упала на лапу Азора"])
 
+    def test_long_input(self):
+        text = '\n'.join([f'word{i}' for i in range(10 ** 4)])
+        big_file = io.StringIO(text)
+        gen = gen_stop_word(big_file, ["wOrd124", "woRD777",
+                                       "word666", "Word9999"], ["WORD666"])
+        words = list(gen)
+        words = [word.strip() for word in words]
+        self.assertEqual(words, ["word124", "word777", "word9999"])
+
+    def test_with_punctuation(self):
+        text = "Hello, world!\nGoodbye world."
+        file = io.StringIO(text)
+        gen = gen_stop_word(file, ["hello"], ["goodbye"])
+        words = list(gen)
+        words = [word.strip() for word in words]
+        self.assertEqual(words, ["Hello, world!"])
+
+        text = ("fruits: apple, banana, mango, lemon... etc.\n"
+                "not fruits: potato, carrot, ?parrot?")
+        file = io.StringIO(text)
+        gen = gen_stop_word(file, ["fruits", "lemon", "parrot"], ['...', '?'])
+        words = list(gen)
+        words = [word.strip() for word in words]
+        self.assertEqual(words, ["fruits: apple, banana, mango, lemon... etc.",
+                                 "not fruits: potato, carrot, ?parrot?"])
+
 
 if __name__ == "__main__":
     unittest.main()
