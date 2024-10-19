@@ -17,6 +17,8 @@ class TestTextGenerator(unittest.TestCase):
         words = [word.strip() for word in words]
         self.assertEqual(words, ["SATOR AREPO TENET OPERA ROTAS"])
 
+        self.file.seek(0)
+
         gen = gen_stop_word(self.file, ["роза", "азора"], ["упала"])
         words = list(gen)
         words = [word.strip() for word in words]
@@ -26,12 +28,14 @@ class TestTextGenerator(unittest.TestCase):
         gen = gen_stop_word(self.file, ["SATOR", "AREPO", "TENET",
                                         "OPERA", "ROTAS"], [])
         words = list(gen)
-        words = [word.strip("\n") for word in words]
+        words = [word.strip() for word in words]
         self.assertEqual(words, ["SATOR AREPO TENET OPERA ROTAS"])
+
+        self.file.seek(0)
 
         gen = gen_stop_word(self.file, ["SATOR AREPO TENET OPERA ROTAS"], [])
         words = list(gen)
-        words = [word.strip("\n") for word in words]
+        words = [word.strip() for word in words]
         self.assertEqual(words, [])
 
     def test_exact_match_stop(self):
@@ -41,12 +45,26 @@ class TestTextGenerator(unittest.TestCase):
         words = [word.strip() for word in words]
         self.assertEqual(words, ["SATOR AREPO TENET OPERA ROTAS"])
 
-    def test_exact_match_stop_2(self):
+        self.file.seek(0)
+
         gen = gen_stop_word(self.file, ['OPERA'],
                             ["а Роза упала на лапу Азора"])
         words = list(gen)
         words = [word.strip() for word in words]
         self.assertEqual(words, ["SATOR AREPO TENET OPERA ROTAS"])
+
+    def test_register_differ(self):
+        gen = gen_stop_word(self.file, ['tenet'])
+        words = list(gen)
+        words = [word.strip() for word in words]
+        self.assertEqual(words, ["SATOR AREPO TENET OPERA ROTAS"])
+
+        self.file.seek(0)
+
+        gen = gen_stop_word(self.file, ['Роза'], ['teneT'])
+        words = list(gen)
+        words = [word.strip() for word in words]
+        self.assertEqual(words, ['а Роза упала на лапу Азора'])
 
     def test_empty(self):
         gen = gen_stop_word(self.file, None, None)
@@ -54,6 +72,9 @@ class TestTextGenerator(unittest.TestCase):
         self.assertEqual(words, [])
         empty_text = "   \n!!!\n"
         file = io.StringIO(empty_text)
+
+        self.file.seek(0)
+
         gen = gen_stop_word(file, ["роза"], [""])
         words = list(gen)
         self.assertEqual(words, [])
@@ -62,8 +83,14 @@ class TestTextGenerator(unittest.TestCase):
         with patch("builtins.open", mock_open(read_data=self.text)):
             gen = gen_stop_word("file.txt", ["TENET"], ["азора"])
             words = list(gen)
-            words = [word.strip("\n") for word in words]
+            words = [word.strip() for word in words]
             self.assertEqual(words, ["SATOR AREPO TENET OPERA ROTAS"])
+
+        with patch("builtins.open", mock_open(read_data=self.text)):
+            gen = gen_stop_word("file.txt", ["азора"], ["Apero"])
+            words = list(gen)
+            words = [word.strip() for word in words]
+            self.assertEqual(words, ["а Роза упала на лапу Азора"])
 
 
 if __name__ == "__main__":
