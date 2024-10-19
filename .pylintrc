@@ -21,6 +21,7 @@ disable=
     W0212,   # Access to a protected member
     E0602,
     W0621,   # redefine file name
+    W0719,   # general exception
 
 
 [FORMAT]

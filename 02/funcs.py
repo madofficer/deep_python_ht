@@ -19,7 +19,7 @@ def check_str(value=None):
 
 check_str(value="123")
 check_str(value=1)
-check_str(value=None)
+# check_str(value=None)
 
 
 @retry_deco(2, [ValueError])
@@ -30,4 +30,4 @@ def check_int(value=None):
 
 
 check_int(value=1)
-check_int(value=None)
+# check_int(value=None)

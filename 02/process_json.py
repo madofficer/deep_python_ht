@@ -40,24 +40,24 @@ def process_json(
                     print(callback(key, tok))
 
 
-if __name__ == "__main__":
-    with open("poets.txt", "r", encoding="utf-8") as f:
-        JSON_STRING = " ".join(line.strip() for line in f.readlines())
-
-    keys_arg = ["Anton_Chekhov", "Lev_Tolstoy", "Alexander_Pushkin"]
-    tokens_arg = ["СЕРДЦЕ", "жизнь", "мЫ"]
-    process_json(
-        JSON_STRING,
-        keys_arg,
-        tokens_arg,
-        lambda author, his_word: f"{author=}, {his_word=}",
-    )
-    print("---")
-    process_json(
-        JSON_STRING, None, None,
-        lambda author, his_word: f"{author=}, {his_word=}"
-    )
-    print("---")
-    process_json(JSON_STRING, keys_arg, tokens_arg, None)
-    print("---")
-    process_json(JSON_STRING, None, None, None)
+# if __name__ == "__main__":
+#     with open("poets.txt", "r", encoding="utf-8") as f:
+#         JSON_STRING = " ".join(line.strip() for line in f.readlines())
+#
+#     keys_arg = ["Anton_Chekhov", "Lev_Tolstoy", "Alexander_Pushkin"]
+#     tokens_arg = ["СЕРДЦЕ", "жизнь", "мЫ"]
+#     process_json(
+#         JSON_STRING,
+#         keys_arg,
+#         tokens_arg,
+#         lambda author, his_word: f"{author=}, {his_word=}",
+#     )
+#     print("---")
+#     process_json(
+#         JSON_STRING, None, None,
+#         lambda author, his_word: f"{author=}, {his_word=}"
+#     )
+#     print("---")
+#     process_json(JSON_STRING, keys_arg, tokens_arg, None)
+#     print("---")
+#     process_json(JSON_STRING, None, None, None)
