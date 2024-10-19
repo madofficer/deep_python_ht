@@ -106,6 +106,16 @@ class TestRetryDeco(unittest.TestCase):
 
         mock_print.assert_has_calls(expected_calls)
 
+    def test_negative_attempts(self):
+        with self.assertRaises(ValueError) as context:
+            @retry_deco(attempts=-1)
+            def neg_function():
+                pass
+
+            neg_function()
+
+        self.assertEqual(str(context.exception), "Number of attempts must be non-negative.")
+
 
 if __name__ == "__main__":
     unittest.main()
