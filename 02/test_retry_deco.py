@@ -114,7 +114,8 @@ class TestRetryDeco(unittest.TestCase):
 
             neg_function()
 
-        self.assertEqual(str(context.exception), "Number of attempts must be non-negative.")
+        self.assertEqual(str(context.exception),
+                         "Number of attempts must be non-negative.")
 
 
 if __name__ == "__main__":
