@@ -1,11 +1,14 @@
+from collections.abc import Iterable
+
+
 class CustomList(list):
     def __init__(self, iterable=None):
         if iterable is None:
             iterable = []
-        elif not isinstance(iterable, (list, tuple, set, frozenset, dict)):
+        elif not isinstance(iterable, Iterable):
             raise TypeError(
-                f"Expected types are: 'list', 'tuple', 'set', "
-                f"'frozenset', 'dict', got {type(iterable).__name__} instead"
+                f"Expected an iterable object, "
+                f"got {type(iterable).__name__} instead"
             )
         if not all(isinstance(i, (int, float)) for i in iterable):
             raise TypeError(
@@ -107,3 +110,4 @@ if __name__ == "__main__":
     # print(b + (1, 2, 3))
     # d = CustomList('45345')
     # print(d)
+    # print(CustomList(range(11)))
