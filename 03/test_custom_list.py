@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 from io import StringIO
 from copy import deepcopy
-from operator import add
+from operator import add, sub
 from itertools import zip_longest
 from custom_list import CustomList
 
@@ -198,16 +198,21 @@ class TestCustomList(unittest.TestCase):
         self.assertEqual(CustomList(a), CustomList(a1))
 
     def test_add_invalid(self):
+        a = [5, 1, 3, 7]
+        a_custom = CustomList(a)
+        b = [1, 2, 7]
+        b_custom = CustomList(b)
+
         with self.assertRaises(TypeError):
-            res = CustomList([5, 1, 3, 7]) + "564"
+            res = a_custom + "564"
         with self.assertRaises(TypeError):
-            res = CustomList([1, 2, 7]) + (5, ())
+            res = b_custom + (5, ())
         with self.assertRaises(TypeError):
-            res = CustomList([5, 1, 3, 7]) + {1, 77, 245}
+            res = a_custom + {1, 77, 245}
         with self.assertRaises(TypeError):
-            res = CustomList([1, 2, 7]) + {1: 2, 2: 2}
+            res = b_custom + {1: 2, 2: 2}
         with self.assertRaises(TypeError):
-            res = CustomList([1, 2, 7]) + [(0, 0), {}, [1, 2]]
+            res = b_custom + [(0, 0), {}, [1, 2]]
             print(res)
 
     def test_radd_int_pos(self):
@@ -260,108 +265,289 @@ class TestCustomList(unittest.TestCase):
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_radd_float_non_pos(self):
-        res = 0.0 + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([5, 1, 3, 7]))
-        res = -10.2 + CustomList([1, 2, 7])
+        a = [5, 1, 3, 7]
+        a1 = a.copy()
+        a_custom = CustomList(a)
+        b = [1, 2, 7]
+        b1 = b.copy()
+        b_custom = CustomList(b)
+
+        res = 0.0 + a_custom
+        self.assertEqual(res, CustomList([0.0 + i for i in a]))
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = -10.2 + b_custom
         self.assertEqual(res, CustomList([-9.2, -8.2, -3.2]))
+        self.assertEqual(b_custom, CustomList(b1))
 
     def test_radd_list(self):
-        res = [5, 1, 3, 7] + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([10, 2, 6, 14]))
-        res = [1, 2, 7] + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([6, 3, 10, 7]))
-        res = [0, 1] + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([5, 2, 3, 7]))
+        a = [5, 1, 3, 7]
+        a1 = a.copy()
+        a_custom = CustomList(a)
+        b = [1, 2, 7]
+        b1 = b.copy()
+        b_custom = CustomList(b)
+
+        res = a + a_custom
+        self.assertEqual(res, CustomList(list(map(add, a, a))))
+        self.assertEqual(a, a1)
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = b + a_custom
+        self.assertEqual(res, CustomList([
+            i + j for i, j in zip_longest(a, b, fillvalue=0)
+        ]))
+        self.assertEqual(b, b1)
+        self.assertEqual(b_custom, CustomList(b1))
+
+        res = [0, 1] + a_custom
+        self.assertEqual(res, CustomList([
+            i + j for i, j in zip_longest([0, 1], a, fillvalue=0)
+        ]))
+        self.assertEqual(a_custom, CustomList(a1))
 
     def test_radd_tuple(self):
-        res = tuple([5, 1, 3, 7]) + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([10, 2, 6, 14]))
-        res = tuple([1, 2, 7]) + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([6, 3, 10, 7]))
-        res = (1, 0) + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([6, 1, 3, 7]))
+        a = (5, 1, 3, 7)
+        a1 = deepcopy(a)
+        a_custom = CustomList(a)
+        b = (1, 2, 7)
+        b1 = deepcopy(b)
+        b_custom = CustomList(b)
+
+        res = a + a_custom
+        self.assertEqual(res, CustomList(list(map(add, a, a))))
+        self.assertEqual(a, a1)
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = b + a_custom
+        self.assertEqual(res, CustomList([
+            i + j for i, j in zip_longest(list(a), list(b), fillvalue=0)
+        ]))
+        self.assertEqual(b, b1)
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = (1, 0) + b_custom
+        self.assertEqual(res, CustomList([
+            i + j for i, j in zip_longest([1, 0], list(b), fillvalue=0)
+        ]))
+        self.assertEqual(b_custom, CustomList(b1))
 
     def test_radd_custom_list(self):
-        res = CustomList([]) + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([5, 1, 3, 7]))
-        res = CustomList([1, 2, 7]) + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([6, 3, 10, 7]))
-        res = CustomList([1, 2]) + CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([6, 3, 3, 7]))
-        res = CustomList([0.4, 1]) + CustomList([1, 2, 7])
-        self.assertEqual(res, CustomList([1.4, 3, 7]))
+        a = (5, 1, 3, 7)
+        a1 = deepcopy(a)
+        a_custom = CustomList(a)
+        b = (1, 2, 7)
+        b1 = deepcopy(b)
+        b_custom = CustomList(b)
+
+        res = CustomList([]) + a_custom
+        self.assertEqual(res, CustomList([
+            i + j for i, j in zip_longest([], list(a), fillvalue=0)
+        ]))
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = b_custom + a_custom
+        self.assertEqual(res, CustomList([
+            i + j for i, j in zip_longest(list(b), list(a), fillvalue=0)
+        ]))
+        self.assertEqual(a_custom, CustomList(a1))
+        self.assertEqual(b_custom, CustomList(b1))
+
+        res = CustomList([1, 2]) + a_custom
+        self.assertEqual(res, CustomList([
+            i + j for i, j in zip_longest([1, 2], list(a), fillvalue=0)
+        ]))
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = CustomList([0.4, 1]) + b_custom
+        self.assertEqual(res, CustomList([
+            i + j for i, j in zip_longest([0.4, 1], list(b), fillvalue=0)
+        ]))
 
     def test_radd_invalid(self):
+        a = (5, 1, 3, 7)
+        a_custom = CustomList(a)
+        b = (1, 2, 7)
+        b_custom = CustomList(b)
+
         with self.assertRaises(TypeError):
-            res = "" + CustomList([5, 1, 3, 7])
+            res = "" + a_custom
         with self.assertRaises(TypeError):
-            res = ({5}, 5) + CustomList([1, 2, 7])
+            res = ({5}, 5) + b_custom
         with self.assertRaises(TypeError):
-            res = {1, 11, 111} + CustomList([5, 1, 3, 7])
+            res = {1, 11, 111} + a_custom
         with self.assertRaises(TypeError):
-            res = {1: 2, 2: 2} + CustomList([1, 2, 7])
+            res = {1: 2, 2: 2} + b_custom
         with self.assertRaises(TypeError):
-            res = [(0, 0), {22, 31}, []] + CustomList([1, 2, 7])
+            res = [(0, 0), {22, 31}, []] + b_custom
             print(res)
 
     def test_sub_int_pos(self):
-        res = CustomList([5, 1, 3, 7]) - 1
-        self.assertEqual(res, CustomList([4, 0, 2, 6]))
-        res = CustomList([1, 2, 7]) - 10
-        self.assertEqual(res, CustomList((-9, -8, -3)))
+        a = [5, 1, 3, 7]
+        a1 = a.copy()
+        a_custom = CustomList(a)
+        b = [1, 2, 7]
+        b1 = b.copy()
+        b_custom = CustomList(b)
+
+        res = a_custom - 1
+        self.assertEqual(res, CustomList([i - 1 for i in a]))
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = b_custom - 10
+        self.assertEqual(res, CustomList([i - 10 for i in b]))
+        self.assertEqual(b_custom, CustomList(b1))
 
     def test_sub_int_non_pos(self):
-        res = CustomList([5, 1, 3, 7]) - 0
-        self.assertEqual(res, CustomList([5, 1, 3, 7]))
-        res = CustomList([5, 1, 3, 7]) - (-1)
-        self.assertEqual(res, CustomList([6, 2, 4, 8]))
-        res = CustomList([1, 2, 7]) - (-42)
-        self.assertEqual(res, CustomList((43, 44, 49)))
+        a = [5, 1, 3, 7]
+        a1 = a.copy()
+        a_custom = CustomList(a)
+        b = [1, 2, 7]
+        b1 = b.copy()
+        b_custom = CustomList(b)
+
+        res = a_custom - 0
+        self.assertEqual(res, CustomList([i - 0 for i in a]))
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = a_custom - (-1)
+        self.assertEqual(res, CustomList([i - (-1) for i in a]))
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = b_custom - (-42)
+        self.assertEqual(res, CustomList([i - (-42) for i in b]))
+        self.assertEqual(b_custom, CustomList(b1))
 
     def test_sub_list(self):
-        res = CustomList([5, 1, 3, 7]) - [1, 2, 7]
-        self.assertEqual(res, CustomList([4, -1, -4, 7]))
-        res = CustomList([1, 2, 7]) - [0, 1, 3, -4.5]
-        self.assertEqual(res, CustomList([1, 1, 4, 4.5]))
-        res = CustomList([5, 1, 3, 7]) - [1, 1]
-        self.assertEqual(res, CustomList([4, 0, 3, 7]))
+        a = [5, 1, 3, 7]
+        a1 = a.copy()
+        a_custom = CustomList(a)
+        b = [1, 2, 7]
+        b1 = b.copy()
+        b_custom = CustomList(b)
+
+        res = a_custom - b
+        self.assertEqual(res, CustomList([
+            i - j for i, j in zip_longest(a, b, fillvalue=0)
+        ]))
+        self.assertEqual(b, b1)
+        self.assertEqual(a_custom, CustomList(a1))
+
+        c = [0, 1, 3, -4.5]
+        c1 = c.copy()
+        res = b_custom - c
+        self.assertEqual(res, CustomList([
+            i - j for i, j in zip_longest(b, c, fillvalue=0)
+        ]))
+        self.assertEqual(c, c1)
+        self.assertEqual(b_custom, CustomList(b1))
+
+        res = a_custom - [1, 1]
+        self.assertEqual(res, CustomList([
+            i - j for i, j in zip_longest(a, [1, 1], fillvalue=0)
+        ]))
+        self.assertEqual(a_custom, CustomList(a1))
 
     def test_sub_custom_list(self):
-        res = CustomList([5, 1, 3, 7]) - tuple([1, 2, 7])
-        self.assertEqual(res, CustomList([4, -1, -4, 7]))
-        res = CustomList([1, 2, 7]) - (0, 1, 3, -4.5)
-        self.assertEqual(res, CustomList([1, 1, 4, 4.5]))
-        res = CustomList([5, 1, 3, 7]) - (1, 1)
-        self.assertEqual(res, CustomList([4, 0, 3, 7]))
+        a = [5, 1, 3, 7]
+        a1 = a.copy()
+        a_custom = CustomList(a)
+        b = (1, 2, 7)
+        b1 = deepcopy(b)
+        b_custom = CustomList(b)
+
+        res = a_custom - b
+        self.assertEqual(res, CustomList([
+            i - j for i, j in zip_longest(a, b, fillvalue=0)
+        ]))
+        self.assertEqual(a_custom, CustomList(a1))
+        self.assertEqual(b, b1)
+
+        c = (0, 1, 3, -4.5)
+        c1 = deepcopy(c)
+        res = b_custom - c
+        self.assertEqual(res, CustomList([
+            i - j for i, j in zip_longest(list(b), list(c), fillvalue=0)
+        ]))
+        self.assertEqual(b_custom, CustomList(b1))
+        self.assertEqual(c, c1)
+
+        res = a_custom - (1, 1)
+        self.assertEqual(res, CustomList([
+            i - j for i, j in zip_longest(a, [1, 1], fillvalue=0)
+        ]))
+        self.assertEqual(a_custom, CustomList(a1))
 
     def test_sub_invalid(self):
+        a = [5, 1, 3, 7]
+        a_custom = CustomList(a)
+        b = (1, 2, 7)
+        b_custom = CustomList(b)
+
         with self.assertRaises(TypeError):
-            res = CustomList([5, 1, 3, 7]) - "564"
+            res = a_custom - "564"
         with self.assertRaises(TypeError):
-            res = CustomList([1, 2, 7]) - (5, ())
+            res = b_custom - (5, ())
             print(res)
 
     def test_rsub_int_pos(self):
-        res = 10 - CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([5, 9, 7, 3]))
-        res = 15 - CustomList([1, 2, 7])
-        self.assertEqual(res, CustomList([14, 13, 8]))
+        a = [5, 1, 3, 7]
+        a1 = a.copy()
+        a_custom = CustomList(a)
+        b = (1, 2, 7)
+        b1 = deepcopy(b)
+        b_custom = CustomList(b)
+
+        res = 10 - a_custom
+        self.assertEqual(res, CustomList([10 - i for i in a]))
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = 15 - b_custom
+        self.assertEqual(res, CustomList([15 - i for i in b]))
+        self.assertEqual(b_custom, CustomList(b1))
 
     def test_rsub_int_non_pos(self):
-        res = 0 - CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([-5, -1, -3, -7]))
-        res = -5 - CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([-10, -6, -8, -12]))
-        res = -100 - CustomList([1, 2, 7])
-        self.assertEqual(res, CustomList([-101, -102, -107]))
+        a = [5, 1, 3, 7]
+        a1 = a.copy()
+        a_custom = CustomList(a)
+        b = (1, 2, 7)
+        b1 = deepcopy(b)
+        b_custom = CustomList(b)
+
+        res = 0 - a_custom
+        self.assertEqual(res, CustomList([0 - i for i in a]))
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = -5 - a_custom
+        self.assertEqual(res, CustomList([-5 - i for i in a]))
+
+        res = -100 - b_custom
+        self.assertEqual(res, CustomList([-100 - i for i in b]))
+        self.assertEqual(b_custom, CustomList(b1))
 
     def test_rsub_list(self):
-        res = [10, 10] - CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([5, 9, -3, -7]))
-        res = [10, 10, 10] - CustomList([1, 2, 7])
-        self.assertEqual(res, CustomList([9, 8, 3]))
-        res = [1] - CustomList([5, 1, 3, 7])
-        self.assertEqual(res, CustomList([-4, -1, -3, -7]))
+        a = [5, 1, 3, 7]
+        a1 = a.copy()
+        a_custom = CustomList(a)
+        b = [1, 2, 7]
+        b1 = b.copy()
+        b_custom = CustomList(b)
+
+        res = [10, 10] - a_custom
+        self.assertEqual(res, CustomList([
+            i - j for i, j in zip_longest([10, 10], a, fillvalue=0)
+        ]))
+        self.assertEqual(a_custom, CustomList(a1))
+
+        res = [10, 10, 10] - b_custom
+        self.assertEqual(res, CustomList(list(map(sub, [10, 10, 10], b))))
+        self.assertEqual(b_custom, CustomList(b1))
+
+        res = [1] - a_custom
+        self.assertEqual(res, CustomList([
+            i - j for i, j in zip_longest([1], a, fillvalue=0)
+        ]))
+        self.assertEqual(a_custom, CustomList(a1))
 
     def test_rsub_custom_list(self):
         res = [1, 2, 7] - CustomList([5, 1, 3, 7])
