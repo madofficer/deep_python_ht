@@ -22,6 +22,7 @@ disable=
     E0602,
     W0621,   # redefine file name
     W0719,   # general exception
+    C2801,   # unnecessary call
 
 
 [FORMAT]

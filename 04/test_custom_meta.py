@@ -78,6 +78,9 @@ class TestCustomMeta(unittest.TestCase):
         with self.assertRaises(AttributeError):
             print(self.obj._CustomClass__non_private_attr)
 
+        with self.assertRaises(AttributeError):
+            self.obj.__setattr__ = 5
+
     def test_magic_methods(self):
         self.assertEqual(str(self.obj), "Custom_by_metaclass")
 

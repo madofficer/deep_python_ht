@@ -2,6 +2,9 @@ class BaseDescriptor:
     def __init__(self, name=None):
         self.name = name
 
+    def __set_name__(self, owner, name):
+        self.name = name
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
@@ -51,6 +54,15 @@ class Data:
         self.price = price
 
 
-# if __name__ == "__main__":
-#     data = Data(1, "Test Item", 100)
-#     print(data.num, data.name, data.price)
+if __name__ == "__main__":
+    d1 = Data(5, "Item", 100)
+    d2 = Data(10, "Product", 200)
+
+    assert d1.num == 5
+    assert d1.name == "Item"
+    assert d1.price == 100
+
+    d2.name = "New Product"
+    assert d2.name == "New Product"
+    # Убедитесь, что значения d1 не изменились
+    assert d1.name == "Item"
