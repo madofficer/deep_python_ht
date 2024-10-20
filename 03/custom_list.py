@@ -21,7 +21,14 @@ class CustomList(list):
 
     def __add__(self, other):
         if isinstance(other, (int, float)):
-            return CustomList([i + other for i in self])
+            return CustomList(
+                [
+                    round(i + other, 4)
+                    if isinstance(i + other, float)
+                    else i + other
+                    for i in self
+                ]
+            )
         elif isinstance(other, (list, tuple)):
             max_len = max(len(self), len(other))
             res = [0] * max_len
@@ -31,7 +38,11 @@ class CustomList(list):
                 elif i >= len(other):
                     res[i] = self[i]
                 else:
-                    res[i] = self[i] + other[i]
+                    res[i] = (
+                        round(self[i] + other[i], 4)
+                        if isinstance(self[i] + other[i], float)
+                        else self[i] + other[i]
+                    )
             return CustomList(res)
         else:
             raise TypeError(
@@ -44,9 +55,22 @@ class CustomList(list):
 
     def __sub__(self, other):
         if isinstance(other, (int, float)):
-            return self + (-other)
+            return CustomList(
+                [
+                    (
+                        round(i - other, 4)
+                        if isinstance(i - other, float)
+                        else i - other
+                    )
+                    for i in self
+                ]
+            )
         elif isinstance(other, (list, tuple)):
-            return self + [-i for i in other]
+            return self + [
+                round(-i, 4)
+                if isinstance(i, float)
+                else -i for i in other
+                           ]
         else:
             raise TypeError(
                 f"Unsupported operand type(s) for -: 'CustomList' "
@@ -55,9 +79,20 @@ class CustomList(list):
 
     def __rsub__(self, other):
         if isinstance(other, (int, float)):
-            return CustomList([other - i for i in self])
+            return CustomList(
+                [
+                    round(other - i, 4)
+                    if isinstance(other - i, float)
+                    else other - i
+                    for i in self
+                ]
+            )
         elif isinstance(other, (list, tuple)):
-            return CustomList([-i for i in self]) + other
+            return (
+                CustomList([round(-i, 4)
+                            if isinstance(i, float)
+                            else -i for i in self]) + other
+            )
         else:
             raise TypeError(
                 f"Unsupported operand type(s) for -: '{type(other).__name__}' "
@@ -82,9 +117,12 @@ class CustomList(list):
     def __lt__(self, other):
         return sum(self) < sum(other)
 
+    def get_items(self):
+        return list(self)
 
-if __name__ == "__main__":
-    a = CustomList()
+
+# if __name__ == "__main__":
+    # a = CustomList()
     # a.append(100)
     # a.append(1000)
     # print(a + 5)
@@ -110,4 +148,21 @@ if __name__ == "__main__":
     # print(b + (1, 2, 3))
     # d = CustomList('45345')
     # print(d)
-    # print(CustomList(range(11)))
+    # n = CustomList(range(1, 11, 2))
+    # print(n.get_items())
+    # res = (n + 10).get_items()
+    # print(type(res))
+    # x = CustomList([1, 2, 3])
+    # y = CustomList([6])
+    # print(x == y)
+    # print(x.get_items() == y.get_items())
+    # a = [5, 1, 3, 7]
+    # a1 = a.copy()
+    # a_custom = CustomList(a)
+    # b = [1, 2, 7]
+    # b1 = b.copy()
+    # b_custom = CustomList(b)
+    # res = a_custom - 0
+    # ans = CustomList([i - 0 for i in a])
+    # print(res)
+    # print(ans)
