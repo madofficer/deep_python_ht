@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 from io import StringIO
 from copy import deepcopy
 from operator import add, sub
@@ -40,12 +39,10 @@ class TestCustomList(unittest.TestCase):
         with self.assertRaises(TypeError):
             CustomList({1: 56, "2": 52})
 
-    @patch("sys.stdout", new_callable=StringIO)
-    def test_str_custom(self, mock_stdout):
+    def test_str_custom(self):
         a = [5, 1, 3, 7]
         a_custom = CustomList(a)
-        print(a_custom)
-        self.assertEqual(mock_stdout.getvalue().strip(), str(a_custom))
+        self.assertEqual(str(a_custom), "[5, 1, 3, 7] = 16")
 
     def test_add_int_pos(self):
         a = [5, 1, 3, 7]
@@ -54,13 +51,13 @@ class TestCustomList(unittest.TestCase):
         res = a_custom + 10
         ans = CustomList([i + 10 for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = a_custom + 97
         ans = CustomList([i + 97 for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
     def test_add_int_non_pos(self):
@@ -70,13 +67,13 @@ class TestCustomList(unittest.TestCase):
         res = a_custom + 0
         ans = CustomList([i + 0 for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = a_custom + (-1)
         ans = CustomList([i + (-1) for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         b = [1, 2, 7]
@@ -85,7 +82,7 @@ class TestCustomList(unittest.TestCase):
         res = b_custom + (-52)
         ans = CustomList([i + (-52) for i in b])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_add_float_pos(self):
@@ -95,7 +92,7 @@ class TestCustomList(unittest.TestCase):
         res = a_custom + 0.67
         ans = CustomList([i + 0.67 for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         b = [1, 2, 7]
@@ -104,7 +101,7 @@ class TestCustomList(unittest.TestCase):
         res = b_custom + 1.51
         ans = CustomList([i + 1.51 for i in b])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_add_float_non_pos(self):
@@ -115,7 +112,7 @@ class TestCustomList(unittest.TestCase):
         res = a_custom + 0.0
         ans = CustomList([i + 0.0 for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         b = [1, 2, 7]
@@ -125,7 +122,7 @@ class TestCustomList(unittest.TestCase):
         res = b_custom + (-0.17)
         ans = CustomList([i + (-0.17) for i in b])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_add_list(self):
@@ -138,13 +135,13 @@ class TestCustomList(unittest.TestCase):
         res = a_custom + a
         ans = CustomList(list(map(add, a, a)))
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = a_custom + b
         ans = CustomList([i + j for i, j in zip_longest(a, b, fillvalue=0)])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b, b1)
         self.assertEqual(a_custom, CustomList(a1))
 
@@ -153,7 +150,7 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest(a, [0, 1], fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a))
 
     def test_add_tuple(self):
@@ -166,7 +163,7 @@ class TestCustomList(unittest.TestCase):
         res = a_custom + a
         ans = CustomList(tuple(map(add, list(a), list(a))))
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a, a1)
         self.assertEqual(a_custom, CustomList(a1))
 
@@ -175,7 +172,7 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest(list(a), list(b), fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
         self.assertEqual(b, b1)
 
@@ -184,7 +181,7 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest(list(a), [0, 1], fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
     def test_add_custom_list(self):
@@ -198,13 +195,13 @@ class TestCustomList(unittest.TestCase):
         res = a_custom + CustomList([])
         ans = CustomList([i + j for i, j in zip_longest(a, [], fillvalue=0)])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = a_custom + b_custom
         ans = CustomList([i + j for i, j in zip_longest(a, b, fillvalue=0)])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(CustomList(a), CustomList(a1))
         self.assertEqual(CustomList(b), CustomList(b1))
 
@@ -213,13 +210,13 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest(a, [1, 2], fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(CustomList(a), CustomList(a1))
 
         res = b_custom + CustomList([0.4])
         ans = CustomList([1.4, 2, 7])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(CustomList(a), CustomList(a1))
 
     def test_add_invalid(self):
@@ -248,13 +245,13 @@ class TestCustomList(unittest.TestCase):
         res = 11 + a_custom
         ans = CustomList([11 + i for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = 100 + a_custom
         ans = CustomList([100 + i for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
     def test_radd_int_non_pos(self):
@@ -268,19 +265,19 @@ class TestCustomList(unittest.TestCase):
         res = 0 + a_custom
         ans = CustomList([0 + i for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = (-2) + a_custom
         ans = CustomList([-2 + i for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = (-50) + b_custom
         ans = CustomList([-50 + i for i in b])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_radd_float_pos(self):
@@ -294,13 +291,13 @@ class TestCustomList(unittest.TestCase):
         res = 0.5 + a_custom
         ans = CustomList([0.5 + i for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = 2.1 + b_custom
         ans = CustomList([3.1, 4.1, 9.1])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_radd_float_non_pos(self):
@@ -314,13 +311,13 @@ class TestCustomList(unittest.TestCase):
         res = 0.0 + a_custom
         ans = CustomList([0.0 + i for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = -10.2 + b_custom
         ans = CustomList([-9.2, -8.2, -3.2])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_radd_list(self):
@@ -334,14 +331,14 @@ class TestCustomList(unittest.TestCase):
         res = a + a_custom
         ans = CustomList(list(map(add, a, a)))
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a, a1)
         self.assertEqual(a_custom, CustomList(a1))
 
         res = b + a_custom
         ans = CustomList([i + j for i, j in zip_longest(a, b, fillvalue=0)])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b, b1)
         self.assertEqual(b_custom, CustomList(b1))
 
@@ -350,7 +347,7 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest([0, 1], a, fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
     def test_radd_tuple(self):
@@ -364,7 +361,7 @@ class TestCustomList(unittest.TestCase):
         res = a + a_custom
         ans = CustomList(list(map(add, a, a)))
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a, a1)
         self.assertEqual(a_custom, CustomList(a1))
 
@@ -373,7 +370,7 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest(list(a), list(b), fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b, b1)
         self.assertEqual(a_custom, CustomList(a1))
 
@@ -382,7 +379,7 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest([1, 0], list(b), fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_radd_custom_list(self):
@@ -398,7 +395,7 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest([], list(a), fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = b_custom + a_custom
@@ -406,7 +403,7 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest(list(b), list(a), fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
         self.assertEqual(b_custom, CustomList(b1))
 
@@ -415,7 +412,7 @@ class TestCustomList(unittest.TestCase):
             i + j for i, j in zip_longest([1, 2], list(a), fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = CustomList([0.4, 1]) + b_custom
@@ -423,12 +420,12 @@ class TestCustomList(unittest.TestCase):
             [i + j for i, j in zip_longest([0.4, 1], list(b), fillvalue=0)]
         )
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
 
         res = [] + CustomList([])
         ans = CustomList(list(map(add, [], [])))
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
 
     def test_radd_invalid(self):
         a = (5, 1, 3, 7)
@@ -459,13 +456,13 @@ class TestCustomList(unittest.TestCase):
         res = a_custom - 1
         ans = CustomList([i - 1 for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = b_custom - 10
         ans = CustomList([i - 10 for i in b])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_sub_int_non_pos(self):
@@ -479,19 +476,19 @@ class TestCustomList(unittest.TestCase):
         res = a_custom - 0
         ans = CustomList([i - 0 for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = a_custom - (-1)
         ans = CustomList([i - (-1) for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = b_custom - (-42)
         ans = CustomList([i - (-42) for i in b])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_sub_list(self):
@@ -507,7 +504,7 @@ class TestCustomList(unittest.TestCase):
             i - j for i, j in zip_longest(a, b, fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b, b1)
         self.assertEqual(a_custom, CustomList(a1))
 
@@ -518,7 +515,7 @@ class TestCustomList(unittest.TestCase):
             i - j for i, j in zip_longest(b, c, fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(c, c1)
         self.assertEqual(b_custom, CustomList(b1))
 
@@ -527,7 +524,7 @@ class TestCustomList(unittest.TestCase):
             i - j for i, j in zip_longest(a, [1, 1], fillvalue=0)
                           ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
     def test_sub_custom_list(self):
@@ -543,7 +540,7 @@ class TestCustomList(unittest.TestCase):
             i - j for i, j in zip_longest(a, b, fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
         self.assertEqual(b, b1)
 
@@ -554,7 +551,7 @@ class TestCustomList(unittest.TestCase):
             i - j for i, j in zip_longest(list(b), list(c), fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
         self.assertEqual(c, c1)
 
@@ -563,7 +560,7 @@ class TestCustomList(unittest.TestCase):
             i - j for i, j in zip_longest(a, [1, 1], fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
     def test_sub_invalid(self):
@@ -589,13 +586,13 @@ class TestCustomList(unittest.TestCase):
         res = 10 - a_custom
         ans = CustomList([10 - i for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = 15 - b_custom
         ans = CustomList([15 - i for i in b])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_rsub_int_non_pos(self):
@@ -609,19 +606,19 @@ class TestCustomList(unittest.TestCase):
         res = 0 - a_custom
         ans = CustomList([0 - i for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = -5 - a_custom
         ans = CustomList([-5 - i for i in a])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = -100 - b_custom
         ans = CustomList([-100 - i for i in b])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
     def test_rsub_list(self):
@@ -637,19 +634,19 @@ class TestCustomList(unittest.TestCase):
             i - j for i, j in zip_longest([10, 10], a, fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = [10, 10, 10] - b_custom
         ans = CustomList(list(map(sub, [10, 10, 10], b)))
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b_custom, CustomList(b1))
 
         res = [1] - a_custom
         ans = CustomList([i - j for i, j in zip_longest([1], a, fillvalue=0)])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
     def test_rsub_custom_list(self):
@@ -663,14 +660,14 @@ class TestCustomList(unittest.TestCase):
         res = b - a_custom
         ans = CustomList([i - j for i, j in zip_longest(b, a, fillvalue=0)])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(b, b1)
         self.assertEqual(a_custom, CustomList(a1))
 
         res = a - b_custom
         ans = CustomList([i - j for i, j in zip_longest(a, b, fillvalue=0)])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a, a1)
         self.assertEqual(b_custom, CustomList(b1))
 
@@ -679,19 +676,19 @@ class TestCustomList(unittest.TestCase):
             i - j for i, j in zip_longest([10, 20], a, fillvalue=0)
         ])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = [] - a_custom
         ans = CustomList([i - j for i, j in zip_longest([], a, fillvalue=0)])
         self.assertEqual(res, ans)
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
         self.assertEqual(a_custom, CustomList(a1))
 
         res = [] - CustomList([])
         ans = CustomList([])
         self.assertEqual(res, CustomList(list(map(sub, [], []))))
-        self.assertEqual(res.get_items(), ans.get_items())
+        self.assertEqual(list(res), list(ans))
 
     def test_rsub_invalid(self):
         a = [5, 1, 3, 7]

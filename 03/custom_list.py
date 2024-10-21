@@ -117,9 +117,6 @@ class CustomList(list):
     def __lt__(self, other):
         return sum(self) < sum(other)
 
-    def get_items(self):
-        return list(self)
-
 
 # if __name__ == "__main__":
     # a = CustomList()
@@ -166,3 +163,4 @@ class CustomList(list):
     # ans = CustomList([i - 0 for i in a])
     # print(res)
     # print(ans)
+    # print(type(list(ans)))
