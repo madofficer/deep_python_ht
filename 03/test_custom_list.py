@@ -22,9 +22,13 @@ class TestCustomList(unittest.TestCase):
 
         self.assertIsInstance(CustomList(set(a)), CustomList)
         self.assertIsInstance(CustomList(frozenset(a)), CustomList)
-
         self.assertIsInstance(CustomList({1: 123, 2: 321}), CustomList)
+
         self.assertIsInstance(CustomList(range(1, 11)), CustomList)
+        self.assertIsInstance(CustomList(iter([1, 2, 3])), CustomList)
+        self.assertEqual(CustomList(iter([1, 2, 3])), CustomList([1, 2, 3]))
+        self.assertEqual(list(CustomList(iter([1, 2, 3]))), [1, 2, 3])
+
         self.assertIsInstance(CustomList(i for i in range(13)), CustomList)
 
     def test_custom_list_init_invalid(self):

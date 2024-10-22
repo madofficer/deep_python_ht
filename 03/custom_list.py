@@ -10,6 +10,7 @@ class CustomList(list):
                 f"Expected an iterable object, "
                 f"got {type(iterable).__name__} instead"
             )
+        iterable = list(iterable)
         if not all(isinstance(i, (int, float)) for i in iterable):
             raise TypeError(
                 "All elements of the iterable object must be 'int' or 'float'"
@@ -151,8 +152,6 @@ class CustomList(list):
     # print(type(res))
     # x = CustomList([1, 2, 3])
     # y = CustomList([6])
-    # print(x == y)
-    # print(x.get_items() == y.get_items())
     # a = [5, 1, 3, 7]
     # a1 = a.copy()
     # a_custom = CustomList(a)
@@ -164,3 +163,8 @@ class CustomList(list):
     # print(res)
     # print(ans)
     # print(type(list(ans)))
+    # iter_a = iter(a)
+    # print(CustomList(iter_a))
+    # print(CustomList(iter(a)) == CustomList(a1))
+    # print((list(iter(a))))
+    # print((list(iter(a))))
