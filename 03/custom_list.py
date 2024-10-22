@@ -152,7 +152,7 @@ class CustomList(list):
     # print(type(res))
     # x = CustomList([1, 2, 3])
     # y = CustomList([6])
-    a = [5, 1, 3, 7]
+    # a = [5, 1, 3, 7]
     # a1 = a.copy()
     # a_custom = CustomList(a)
     # b = [1, 2, 7]
