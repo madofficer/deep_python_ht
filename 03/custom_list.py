@@ -119,7 +119,7 @@ class CustomList(list):
         return sum(self) < sum(other)
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # a = CustomList()
     # a.append(100)
     # a.append(1000)
@@ -163,8 +163,8 @@ if __name__ == "__main__":
     # print(res)
     # print(ans)
     # print(type(list(ans)))
-    iter_a = iter(a)
-    print(CustomList(iter_a))
+    # iter_a = iter(a)
+    # print(CustomList(iter_a))
     # print(CustomList(iter(a)) == CustomList(a1))
     # print((list(iter(a))))
     # print((list(iter(a))))
