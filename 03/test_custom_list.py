@@ -47,6 +47,9 @@ class TestCustomList(unittest.TestCase):
         a = [5, 1, 3, 7]
         a_custom = CustomList(a)
         self.assertEqual(str(a_custom), "[5, 1, 3, 7] = 16")
+        b = (1, 2, 7)
+        b_custom = CustomList(b)
+        self.assertEqual(str(b_custom), "[1, 2, 7] = 10")
 
     def test_add_int_pos(self):
         a = [5, 1, 3, 7]
