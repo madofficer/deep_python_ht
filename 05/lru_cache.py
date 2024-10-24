@@ -1,10 +1,8 @@
 from collections.abc import Hashable
 
-from typing_extensions import Optional
-
 
 class DLLNode:
-    def __init__(self, key: Hashable, val: Optional[any]):
+    def __init__(self, key: Hashable, val: any):
         self.key, self.val = key, val
         self.prev = self.next = None
 
