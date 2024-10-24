@@ -104,6 +104,7 @@ jobs:
         - name: Check test coverage for 03
           working-directory: ./03
           run: coverage report -m
+
   build_04:
     name: Build and Test for 04
     runs-on: ubuntu-latest
@@ -136,4 +137,38 @@ jobs:
 
       - name: Check test coverage for 04
         working-directory: ./04
+        run: coverage report -m
+
+  build_05:
+    name: Build and Test for 05
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5.2.0
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: ./05
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ../requirements.txt
+
+      - name: Check flake8 for 05
+        working-directory: ./05
+        run: flake8 .
+
+      - name: Check pylint for 05
+        working-directory: ./05
+        run: pylint $(find . -name "*.py" | xargs)
+
+      - name: Run tests with pytest and check coverage for 05
+        working-directory: ./05
+        run: |
+          coverage run -m pytest 
+
+      - name: Check test coverage for 05
+        working-directory: ./05
         run: coverage report -m
