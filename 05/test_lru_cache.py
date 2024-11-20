@@ -1,5 +1,6 @@
 import unittest
-from functools import lru_cache
+from email.utils import decode_rfc2231
+from functools import lru_cache, cache
 
 from lru_cache import DLLNode, LRUCache
 
@@ -22,7 +23,7 @@ class TestLRUCache(unittest.TestCase):
         self.assertEqual(res, 2)
 
         res = self.cache.get(100)
-        self.assertEqual(res, -1)
+        self.assertEqual(res, None)
 
     def test_set_existing_key(self):
         self.cache.set(1, 100)
@@ -40,7 +41,7 @@ class TestLRUCache(unittest.TestCase):
         res1 = self.cache.get(1)
         res2 = self.cache.get("2")
         res3 = self.cache.get(3.0)
-        self.assertEqual(res1, -1)
+        self.assertEqual(res1, None)
         self.assertEqual(res2, "val2")
         self.assertEqual(res3, {3})
 
@@ -51,9 +52,11 @@ class TestLRUCache(unittest.TestCase):
         self.assertEqual(res1, 10)
         self.cache.set("3", "_3_")
         res2 = self.cache.get(2)
-        self.assertEqual(res2, -1)
+        self.assertEqual(res2, None)
         res3 = self.cache.get("3")
         self.assertEqual(res3, "_3_")
+        res4 = self.cache.get(1)
+        self.assertEqual(res4, 10)
 
     def test_invalid_key(self):
         self.cache.set(1, 11)
@@ -79,14 +82,14 @@ class TestLRUCache(unittest.TestCase):
             big_cache.set(f"{key=}", key)
 
         res1 = big_cache.get("key=0")
-        self.assertEqual(res1, -1)
+        self.assertEqual(res1, None)
         res2 = big_cache.get("key=39")
-        self.assertEqual(res2, -1)
+        self.assertEqual(res2, None)
         res3 = big_cache.get("key=40")
         self.assertEqual(res3, 40)
         big_cache.set("new_key", 41)
         res4 = big_cache.get("key=41")
-        self.assertEqual(res4, -1)
+        self.assertEqual(res4, None)
         res5 = big_cache.get("key=40")
         self.assertEqual(res5, 40)
 
@@ -94,12 +97,66 @@ class TestLRUCache(unittest.TestCase):
         non_pos_obj = LRUCache(0)
         non_pos_obj.set(1, 1)
         res1 = non_pos_obj.get(1)
-        self.assertEqual(res1, -1)
+        self.assertEqual(res1, None)
 
-        non_pos_obj = LRUCache(-1)
-        non_pos_obj.set(-1, -1)
-        res2 = non_pos_obj.get(-1)
-        self.assertEqual(res2, -1)
+        non_pos_obj = LRUCache(None)
+        non_pos_obj.set(None, None)
+        res2 = non_pos_obj.get(None)
+        self.assertEqual(res2, None)
+
+    def test_task(self):
+        self.cache.set("k1", "val1")
+        self.cache.set("k2", "val2")
+
+        res1 = self.cache.get("k3")
+        self.assertEqual(res1, None)
+        res2 = self.cache.get("k2")
+        self.assertEqual(res2, "val2")
+        res3 = self.cache.get("k1")
+        self.assertEqual(res3, "val1")
+
+        self.cache.set("k3", "val3")
+
+        res4 = self.cache.get("k3")
+        self.assertEqual(res4, "val3")
+        res5 = self.cache.get("k2")
+        self.assertEqual(res5, None)
+        res6 = self.cache.get("k1")
+        self.assertEqual(res6, "val1")
+
+    def test_cap_one(self):
+        obj = LRUCache(1)
+
+        obj.set(1, 1)
+        res1 = obj.get(1)
+        self.assertEqual(res1, 1)
+        obj.set(2, 2)
+        res2 = obj.get(2)
+        self.assertEqual(res2, 2)
+        res3 = obj.get(1)
+        self.assertEqual(res3, None)
+
+    def test_change_existing_val(self):
+        self.cache.set(1, 10)
+        self.cache.set("key2", "lol")
+
+        res1 = self.cache.get(1)
+        self.assertEqual(res1, 10)
+        res2 = self.cache.get("key2")
+        self.assertEqual(res2, "lol")
+
+        self.cache.set("key2", "new_str")
+        res3 = self.cache.get("key2")
+        self.assertEqual(res3, "new_str")
+        self.cache.set(1, 111)
+        res4 = self.cache.get(1)
+        self.assertEqual(res4, 111)
+
+        self.cache.set((3,), [3, 1])
+        res5 = self.cache.get((3,))
+        self.assertEqual(res5, [3, 1])
+        res6 = self.cache.get(2)
+        self.assertEqual(res6, None)
 
 
 if __name__ == "__main__":
