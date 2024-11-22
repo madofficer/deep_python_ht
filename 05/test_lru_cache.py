@@ -1,7 +1,6 @@
 import unittest
 from email.utils import decode_rfc2231
 from functools import lru_cache, cache
-
 from lru_cache import DLLNode, LRUCache
 
 
@@ -158,6 +157,24 @@ class TestLRUCache(unittest.TestCase):
         res6 = self.cache.get(2)
         self.assertEqual(res6, None)
 
+    def test_change_val_consequence(self):
+        self.cache.set(1, 111)
+        self.cache.set(2, 222)
+
+        res1 = self.cache.get(1)
+        self.assertEqual(res1, 111)
+        res2 = self.cache.get(2)
+        self.assertEqual(res2, 222)
+
+        self.cache.set(1, 777)
+        self.cache.set(7, 17)
+
+        res3 = self.cache.get(2)
+        self.assertEqual(res3, None)
+        res4 = self.cache.get(1)
+        self.assertEqual(res4, 777)
+        res5 = self.cache.get(7)
+        self.assertEqual(res5, 17)
 
 if __name__ == "__main__":
     unittest.main()

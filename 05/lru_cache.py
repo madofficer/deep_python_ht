@@ -1,8 +1,9 @@
 from collections.abc import Hashable
+from typing import Any
 
 
 class DLLNode:
-    def __init__(self, key: Hashable, val):
+    def __init__(self, key: Hashable, val: Any):
         self.key, self.val = key, val
         self.prev = self.next = None
 
@@ -23,14 +24,14 @@ class LRUCache:
         prev.next = nxt.prev = node
         node.next, node.prev = nxt, prev
 
-    def get(self, key: Hashable):
+    def get(self, key: Hashable) -> Any:
         if key in self._cache:
             self._remove(self._cache[key])
             self._insert(self._cache[key])
             return self._cache[key].val
         return None
 
-    def set(self, key: Hashable, val) -> None:
+    def set(self, key: Hashable, val: Any) -> None:
         if key in self._cache:
             self._remove(self._cache[key])
         self._cache[key] = DLLNode(key, val)
