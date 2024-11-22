@@ -176,5 +176,6 @@ class TestLRUCache(unittest.TestCase):
         res5 = self.cache.get(7)
         self.assertEqual(res5, 17)
 
+
 if __name__ == "__main__":
     unittest.main()
