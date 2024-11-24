@@ -23,6 +23,8 @@ disable=
     W0621,   # redefine file name
     W0719,   # general exception
     C2801,   # unnecessary call
+    W0640,   # variable defined in loop (cell-var-from-loop)
+
 
 
 [FORMAT]

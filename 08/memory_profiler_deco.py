@@ -28,10 +28,10 @@ def profile_deco(func):
         nonlocal stats_store
 
         if stats_store.total_calls == 0:
-            print(f'No profiling data availiable for {func.__name__}')
+            print(f"No profiling data availiable for {func.__name__}")
         else:
-            print(f'Profilling statistics for {func.__name__}:')
-            stats_store.sort_stats('cumulative').print_stats()
+            print(f"Profilling statistics for {func.__name__}:")
+            stats_store.sort_stats("cumulative").print_stats()
 
     wrapper.print_stat = print_stat
 
@@ -40,16 +40,17 @@ def profile_deco(func):
 
 @profile_deco
 def primfacs(n: int) -> list:
-   i = 2
-   primfac = []
-   while i * i <= n:
-       while n % i == 0:
-           primfac.append(i)
-           n = n / i
-       i = i + 1
-   if n > 1:
-       primfac.append(n)
-   return primfac
+    i = 2
+    primfac = []
+    while i * i <= n:
+        while n % i == 0:
+            primfac.append(i)
+            n = n / i
+        i = i + 1
+    if n > 1:
+        primfac.append(n)
+    return primfac
+
 
 @profile_deco
 def find_primes(n):
@@ -65,15 +66,11 @@ def find_primes(n):
     return primes
 
 
-
 if __name__ == "__main__":
     primfacs(2456674363634634727252568769656347)
     primfacs(4777434637373473879597467965959765797)
 
-    find_primes(10 ** 7)
+    find_primes(10**7)
 
     primfacs.print_stat()
     find_primes.print_stat()
-
-
-
