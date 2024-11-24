@@ -51,25 +51,29 @@ def primfacs(n: int) -> list:
        primfac.append(n)
    return primfac
 
-# @profile_deco
-# def factorial(x: int) -> int:
-#     if x == 0:
-#         return 1
-#     if x == 1:
-#         return 1
-#     else:
-#         return factorial(x - 1) * x
+@profile_deco
+def find_primes(n):
+    primes = []
+    for i in range(2, n + 1):
+        is_prime = True
+        for j in range(2, int(i**0.5) + 1):
+            if i % j == 0:
+                is_prime = False
+                break
+        if is_prime:
+            primes.append(i)
+    return primes
 
 
 
 if __name__ == "__main__":
-    factorial(100)
-
     primfacs(2456674363634634727252568769656347)
     primfacs(4777434637373473879597467965959765797)
 
+    find_primes(10 ** 7)
+
     primfacs.print_stat()
-    factorial.print_stat()
+    find_primes.print_stat()
 
 
 
