@@ -1,7 +1,6 @@
 import weakref
 import timeit
 import tracemalloc
-from locale import currency
 
 
 class Regular:
