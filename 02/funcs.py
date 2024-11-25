@@ -31,3 +31,8 @@ def check_int(value=None):
 
 check_int(value=1)
 # check_int(value=None)
+
+# def test_function(should_fail=False):
+#     if should_fail:
+#         raise CustomError("This is a custom error.")
+#     return "Success!"

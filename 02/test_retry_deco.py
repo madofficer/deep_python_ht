@@ -14,15 +14,6 @@ class TestRetryDeco(unittest.TestCase):
         result = success_function()
         self.assertEqual(result, "Success!")
 
-    def test_retry_on_custom_error(self):
-        @retry_deco(attempts=3, exceptions=[CustomError])
-        def failing_function():
-            raise CustomError("This is a custom error.")
-
-        with self.assertRaises(CustomError) as context:
-            failing_function()
-        self.assertEqual(str(context.exception), "This is a custom error.")
-
     def test_failure_after_all_attempts(self):
         @retry_deco(attempts=2, exceptions=[CustomError])
         def always_failing_function():
@@ -44,20 +35,16 @@ class TestRetryDeco(unittest.TestCase):
             "Function unexpected_function failed after 2 attempts.",
         )
 
-    @patch("builtins.print")
-    def test_logging_on_attempts(self, mock_print):
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_logging_on_attempts(self, mock_stdout):
         @retry_deco(attempts=3, exceptions=[CustomError])
         def logging_function():
-            raise CustomError("Logging this error.")
+            raise CustomError("Logging this error")
 
-        with self.assertRaises(CustomError):
-            logging_function()
-
-        expected_calls = [
-            call("Allowed exception: CustomError on attempt: 1. Retrying..."),
-            call("Allowed exception: CustomError on attempt: 2. Retrying..."),
-        ]
-        mock_print.assert_has_calls(expected_calls)
+        res = logging_function()
+        output = mock_stdout.getvalue().strip()
+        self.assertEqual(output, "Allowed exception: CustomError")
+        self.assertIsInstance(res, CustomError)
 
     def test_zero_attempts(self):
         @retry_deco(attempts=0)
@@ -67,7 +54,8 @@ class TestRetryDeco(unittest.TestCase):
         result = should_not_run()
         self.assertEqual(result, "Should not run")
 
-    def test_multiple_allowed_exceptions(self):
+    @patch("builtins.print")
+    def test_multiple_allowed_exceptions(self, mock_print):
         @retry_deco(attempts=3, exceptions=[CustomError, AnotherError])
         def multi_error_function(value):
             if value == "custom":
@@ -76,11 +64,18 @@ class TestRetryDeco(unittest.TestCase):
                 raise AnotherError("Another error occurred")
             return "Success!"
 
-        with self.assertRaises(CustomError):
-            multi_error_function("custom")
+        res1 = multi_error_function("custom")
+        self.assertIsInstance(res1, CustomError)
 
-        with self.assertRaises(AnotherError):
-            multi_error_function("another")
+        res2 = multi_error_function("another")
+        self.assertIsInstance(res2, AnotherError)
+
+        expected_calls = [
+            call("Allowed exception: CustomError"),
+            call("Allowed exception: AnotherError"),
+        ]
+
+        mock_print.assert_has_calls(expected_calls)
 
     def test_no_exceptions(self):
         @retry_deco(attempts=3)
@@ -108,14 +103,16 @@ class TestRetryDeco(unittest.TestCase):
 
     def test_negative_attempts(self):
         with self.assertRaises(ValueError) as context:
+
             @retry_deco(attempts=-1)
             def neg_function():
                 pass
 
             neg_function()
 
-        self.assertEqual(str(context.exception),
-                         "Number of attempts must be non-negative.")
+        self.assertEqual(
+            str(context.exception), "Number of attempts must be non-negative."
+        )
 
 
 if __name__ == "__main__":

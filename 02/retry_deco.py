@@ -17,19 +17,17 @@ def retry_deco(attempts=5, exceptions=None):
                 try:
                     result = func(*args, **kwargs)
                     print(
+                        f"function log\n"
                         f"Running: {func.__name__}, args:{args},"
                         f" kwargs: {kwargs},"
-                        f" attempt:{attempt + 1}"
+                        f" attempt:{attempt + 1}, "
+                        f" output: {result}"
                     )
                     return result
                 except Exception as error:
                     if isinstance(error, tuple(exceptions)):
-                        print(
-                            f"Allowed exception: {error.__class__.__name__} "
-                            f"on attempt: {attempt + 1}. Retrying..."
-                        )
-                        if attempt == attempts - 1:
-                            raise error
+                        print(f"Allowed exception: {error.__class__.__name__}")
+                        return error
 
                     else:
                         print(
@@ -54,6 +52,7 @@ class AnotherError(Exception):
 
 
 # if __name__ == "__main__":
+#
 #     @retry_deco(attempts=3, exceptions=[CustomError])
 #     def test_function(should_fail=False):
 #         if should_fail:

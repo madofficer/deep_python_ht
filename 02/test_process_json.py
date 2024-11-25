@@ -37,8 +37,9 @@ class TestProcessJson(unittest.TestCase):
 
     @patch("sys.stdout", new_callable=StringIO)
     def test_invalid_str(self, mock_stdout):
-        process_json(self.invalid_json_str, self.keys_args,
-                     self.token_args, self.lmd)
+        process_json(
+            self.invalid_json_str, self.keys_args, self.token_args, self.lmd
+        )
         proc_output = mock_stdout.getvalue().strip()
 
         self.assertTrue(proc_output.startswith("json parsing error"))
