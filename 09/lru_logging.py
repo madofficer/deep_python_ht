@@ -109,13 +109,13 @@ def main():
     cache.set('a', 1)
     cache.set('b', 2)
 
-    print(cache.get('a'))  # Получение существующего ключа
-    print(cache.get('c'))  # Получение отсутствующего ключа
+    print(cache.get('a'))
+    print(cache.get('c'))
 
     cache.set('c', 3)
-    cache.set('d', 4)  # Установка нового ключа при превышении ёмкости
+    cache.set('d', 4)
 
-    print(cache.get('b'))  # Получение отсутствующего ключа (должен быть удален)
+    print(cache.get('b'))
 
 
 if __name__ == "__main__":
