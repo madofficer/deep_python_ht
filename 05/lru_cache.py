@@ -9,7 +9,7 @@ class DLLNode:
 
 
 class LRUCache:
-    def __init__(self, capacity: None):
+    def __init__(self, capacity = None):
         self._capacity = 2 if capacity is None else capacity
         self._cache = {}
         self._left, self._right = DLLNode(0, 0), DLLNode(0, 0)
