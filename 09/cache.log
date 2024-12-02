@@ -1,0 +1,85 @@
+2024-12-02 14:43:26,876 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x0000022170C211C0>, 'a', 1), kwargs: {}
+2024-12-02 14:43:26,876 - INFO - Setting new key: a with value: 1
+2024-12-02 14:43:26,876 - INFO - Function: set returned: None
+2024-12-02 14:43:26,876 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x0000022170C211C0>, 'b', 2), kwargs: {}
+2024-12-02 14:43:26,876 - INFO - Setting new key: b with value: 2
+2024-12-02 14:43:26,876 - INFO - Function: set returned: None
+2024-12-02 14:43:26,876 - INFO - Calling function: get with args: (<__main__.LRUCache object at 0x0000022170C211C0>, 'a'), kwargs: {}
+2024-12-02 14:43:26,877 - INFO - Function: get returned: 1
+2024-12-02 14:43:26,887 - INFO - Calling function: get with args: (<__main__.LRUCache object at 0x0000022170C211C0>, 'c'), kwargs: {}
+2024-12-02 14:43:26,888 - WARNING - Key not found: c
+2024-12-02 14:43:26,888 - INFO - Function: get returned: None
+2024-12-02 14:43:26,888 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x0000022170C211C0>, 'c', 3), kwargs: {}
+2024-12-02 14:43:26,888 - INFO - Setting new key: c with value: 3
+2024-12-02 14:43:26,888 - INFO - Function: set returned: None
+2024-12-02 14:43:26,888 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x0000022170C211C0>, 'd', 4), kwargs: {}
+2024-12-02 14:43:26,888 - INFO - Setting new key: d with value: 4
+2024-12-02 14:43:26,888 - INFO - Removing least recently used key: b
+2024-12-02 14:43:26,888 - INFO - Function: set returned: None
+2024-12-02 14:43:26,888 - INFO - Calling function: get with args: (<__main__.LRUCache object at 0x0000022170C211C0>, 'b'), kwargs: {}
+2024-12-02 14:43:26,888 - WARNING - Key not found: b
+2024-12-02 14:43:26,888 - INFO - Function: get returned: None
+2024-12-02 14:47:16,323 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x000001DB147C11F0>, 'a', 1), kwargs: {}
+2024-12-02 14:47:16,323 - INFO - Setting new key: a with value: 1
+2024-12-02 14:47:16,323 - INFO - Function: set returned: None
+2024-12-02 14:47:16,323 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x000001DB147C11F0>, 'b', 2), kwargs: {}
+2024-12-02 14:47:16,323 - INFO - Setting new key: b with value: 2
+2024-12-02 14:47:16,323 - INFO - Function: set returned: None
+2024-12-02 14:47:16,323 - INFO - Calling function: get with args: (<__main__.LRUCache object at 0x000001DB147C11F0>, 'a'), kwargs: {}
+2024-12-02 14:47:16,323 - INFO - Function: get returned: 1
+2024-12-02 14:47:16,323 - INFO - Calling function: get with args: (<__main__.LRUCache object at 0x000001DB147C11F0>, 'c'), kwargs: {}
+2024-12-02 14:47:16,323 - WARNING - Key not found: c
+2024-12-02 14:47:16,324 - INFO - Function: get returned: None
+2024-12-02 14:47:16,324 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x000001DB147C11F0>, 'c', 3), kwargs: {}
+2024-12-02 14:47:16,324 - INFO - Setting new key: c with value: 3
+2024-12-02 14:47:16,324 - INFO - Function: set returned: None
+2024-12-02 14:47:16,324 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x000001DB147C11F0>, 'd', 4), kwargs: {}
+2024-12-02 14:47:16,324 - INFO - Setting new key: d with value: 4
+2024-12-02 14:47:16,324 - INFO - Removing least recently used key: b
+2024-12-02 14:47:16,324 - INFO - Function: set returned: None
+2024-12-02 14:47:16,324 - INFO - Calling function: get with args: (<__main__.LRUCache object at 0x000001DB147C11F0>, 'b'), kwargs: {}
+2024-12-02 14:47:16,324 - WARNING - Key not found: b
+2024-12-02 14:47:16,324 - INFO - Function: get returned: None
+2024-12-02 14:49:57,819 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x000002496E9BF500>, 'a', 1), kwargs: {}
+2024-12-02 14:49:57,819 - INFO - Setting new key: a with value: 1
+2024-12-02 14:49:57,819 - DEBUG - Inserted node with key: a
+2024-12-02 14:49:57,819 - INFO - Function: set returned: None
+2024-12-02 14:49:57,819 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x000002496E9BF500>, 'b', 2), kwargs: {}
+2024-12-02 14:49:57,819 - INFO - Setting new key: b with value: 2
+2024-12-02 14:49:57,819 - DEBUG - Inserted node with key: b
+2024-12-02 14:49:57,819 - INFO - Function: set returned: None
+2024-12-02 14:49:57,819 - INFO - Calling function: get with args: (<__main__.LRUCache object at 0x000002496E9BF500>, 'a'), kwargs: {}
+2024-12-02 14:49:57,819 - DEBUG - Removed node with key: a
+2024-12-02 14:49:57,819 - DEBUG - Inserted node with key: a
+2024-12-02 14:49:57,819 - INFO - Function: get returned: 1
+2024-12-02 14:49:57,819 - INFO - Calling function: get with args: (<__main__.LRUCache object at 0x000002496E9BF500>, 'c'), kwargs: {}
+2024-12-02 14:49:57,819 - WARNING - Key not found: c
+2024-12-02 14:49:57,820 - INFO - Function: get returned: None
+2024-12-02 14:49:57,820 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x000002496E9BF500>, 'c', 3), kwargs: {}
+2024-12-02 14:49:57,820 - INFO - Setting new key: c with value: 3
+2024-12-02 14:49:57,820 - DEBUG - Inserted node with key: c
+2024-12-02 14:49:57,820 - INFO - Function: set returned: None
+2024-12-02 14:49:57,820 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x000002496E9BF500>, 'd', 4), kwargs: {}
+2024-12-02 14:49:57,820 - INFO - Setting new key: d with value: 4
+2024-12-02 14:49:57,820 - DEBUG - Inserted node with key: d
+2024-12-02 14:49:57,820 - INFO - Removing least recently used key: b
+2024-12-02 14:49:57,820 - DEBUG - Removed node with key: b
+2024-12-02 14:49:57,820 - INFO - Function: set returned: None
+2024-12-02 14:49:57,820 - INFO - Calling function: get with args: (<__main__.LRUCache object at 0x000002496E9BF500>, 'b'), kwargs: {}
+2024-12-02 14:49:57,820 - WARNING - Key not found: b
+2024-12-02 14:49:57,820 - INFO - Function: get returned: None
+2024-12-02 14:50:15,284 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x00000227A4F8B6B0>, 'a', 1), kwargs: {}
+2024-12-02 14:50:15,284 - INFO - Setting new key: a with value: 1
+2024-12-02 14:50:15,284 - DEBUG - Inserted node with key: a
+2024-12-02 14:50:15,284 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x00000227A4F8B6B0>, 'b', 2), kwargs: {}
+2024-12-02 14:50:15,284 - INFO - Setting new key: b with value: 2
+2024-12-02 14:50:15,284 - DEBUG - Inserted node with key: b
+2024-12-02 14:50:15,284 - DEBUG - Removed node with key: a
+2024-12-02 14:50:15,284 - DEBUG - Inserted node with key: a
+2024-12-02 14:50:15,284 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x00000227A4F8B6B0>, 'c', 3), kwargs: {}
+2024-12-02 14:50:15,284 - INFO - Setting new key: c with value: 3
+2024-12-02 14:50:15,284 - DEBUG - Inserted node with key: c
+2024-12-02 14:50:15,284 - INFO - Calling function: set with args: (<__main__.LRUCache object at 0x00000227A4F8B6B0>, 'd', 4), kwargs: {}
+2024-12-02 14:50:15,284 - INFO - Setting new key: d with value: 4
+2024-12-02 14:50:15,284 - DEBUG - Inserted node with key: d
+2024-12-02 14:50:15,284 - DEBUG - Removed node with key: b
