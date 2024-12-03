@@ -5,7 +5,6 @@ from typing import Any
 from functools import wraps
 
 
-
 def setup_logging(log_to_stdout=False, custom_filter=None):
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
@@ -30,7 +29,8 @@ def setup_logging(log_to_stdout=False, custom_filter=None):
 def log_function_call(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        logging.info(f'Calling function: {func.__name__} with args: {args}, kwargs: {kwargs}')
+        logging.info(f'Calling function: {func.__name__} '
+                     f'with args: {args}, kwargs: {kwargs}')
         result = func(*args, **kwargs)
         logging.info(f'Function: {func.__name__} returned: {result}')
         return result
