@@ -1,47 +1,64 @@
-import socket
-import threading
 import argparse
-import config
+import threading
+import socket
+from inspect import cleandoc
+from queue import Queue
 
 
-class Client(threading.Thread):
-    def __init__(self, server_host, server_port, url):
-        super().__init__()
-        self.server_host = server_host
-        self.server_port = server_port
-        self.url = url
+class Client:
+    def __init__(self, host, port, urls, num_threads):
+        self.host = host
+        self.port = port
+        self.urls = urls
+        self.num_threads = num_threads
+        self.queue = Queue()
+
+    def load_urls(self):
+        for url in urls:
+            self.queue.put(url)
+
+    def worker(self, thread_id):
+        while not self.queue.empty():
+            url = self.queue.get()
+            try:
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_sock:
+                    client_sock.connect((self.host, self.port))
+                    client_sock.sendall(f"{url}\n".encode("utf-8"))
+                    response = client_sock.recv(1024).decode("utf-8").strip()
+                    print(f"[Thread-{thread_id}] Server response: {response}")
+            except ConnectionError as e:
+                print(f"[Thread-{thread_id}] Error sending URL {url} : {e}")
+            finally:
+                self.queue.task_done()
 
     def run(self):
+        threads = []
+        for i in range(self.num_threads):
+            t = threading.Thread(target=self.worker, args=(i,), daemon=True)
+            threads.append(t)
+            t.start()
 
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
-            client_socket.connect((self.server_host, self.server_port))
-            client_socket.sendall((self.url.encode("utf-8")))
-
-            response = client_socket.recv(1024).decode("utf-8")
-            print(f"{self.url}: {response}")
-
-
-def load_urls(filename):
-    with open(filename) as f:
-        return [line.strip() for line in f]
+        for t in threads:
+            t.join()
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("threads", type=int, help="threads_num")
-    parser.add_argument("filename", type=str, help="url_file")
+    parser = argparse.ArgumentParser(
+        description="Multithreaded client for sending urls"
+    )
+    parser.add_argument("file", help="path to file with urls")
+    parser.add_argument("threads", type=int, help="Number of threads")
+    parser.add_argument("--host", default="localhost", help="Host of the server")
+    parser.add_argument("--port", default=7777, help="Port of the server")
     args = parser.parse_args()
 
-    HOST = config.HOST
-    PORT = config.PORT
-    urls = load_urls(args.filename)
+    try:
+        with open(args.file, "r") as f:
+            urls = [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        print(f"Error: File {args.file} not found")
+        exit(1)
 
-    threads = []
-    for i in range(args.threads):
-        for url in urls[i :: args.threads]:
-            client = Client(HOST, PORT, url)
-            client.start()
-            threads.append(client)
-
-    for thread in threads:
-        thread.join()
+    client = Client(args.host, args.port, urls, args.threads)
+    client.load_urls()
+    client.run()
