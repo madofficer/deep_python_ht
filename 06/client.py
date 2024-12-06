@@ -14,18 +14,22 @@ class Client:
         self.queue = Queue()
 
     def load_urls(self):
-        for url in urls:
+        for url in self.urls:
             self.queue.put(url)
 
     def worker(self, thread_id):
         while not self.queue.empty():
             url = self.queue.get()
             try:
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_sock:
+                with socket.socket(
+                        socket.AF_INET, socket.SOCK_STREAM
+                ) as client_sock:
                     client_sock.connect((self.host, self.port))
                     client_sock.sendall(f"{url}\n".encode("utf-8"))
                     response = client_sock.recv(4096).decode("utf-8").strip()
-                    json_resp = json.loads(response) if response else 'empty answer'
+                    json_resp = (
+                        json.loads(response) if response else "empty answer"
+                    )
                     print(f"[Thread-{thread_id}] Server response: {json_resp}")
             except ConnectionError as e:
                 print(f"[Thread-{thread_id}] Error sending URL {url} : {e}")
@@ -47,18 +51,24 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Multithreaded client for sending urls"
     )
-    parser.add_argument("file", help="path to file with urls")
-    parser.add_argument("threads", type=int, help="Number of threads")
-    parser.add_argument("--host", default="localhost", help="Host of the server")
-    parser.add_argument("--port", default=7777, help="Port of the server")
+    parser.add_argument("file",
+                        help="path to file with urls")
+    parser.add_argument("threads", type=int,
+                        help="Number of threads")
+    parser.add_argument("--host",
+                        default="localhost",
+                        help="Host of the server")
+    parser.add_argument("--port",
+                        default=7777,
+                        help="Port of the server")
     args = parser.parse_args()
 
     try:
-        with open(args.file, "r") as f:
+        with open(args.file, "r", encoding='utf-8') as f:
             urls = [line.strip() for line in f if line.strip()]
     except FileNotFoundError:
         print(f"Error: File {args.file} not found")
-        exit(1)
+        sys.exit()
 
     client = Client(args.host, args.port, urls, args.threads)
     client.load_urls()

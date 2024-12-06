@@ -29,9 +29,11 @@ class Worker(threading.Thread):
                 response = requests.get(url, timeout=10)
                 response.raise_for_status()
                 top_words = self.word_counter(response.text)
-                result = {"status": "success", "url": url, "top_words": top_words}
+                result = {"status": "success",
+                          "url": url,
+                          "top_words": top_words}
             except Exception as e:
-                result = {"status": "error", "url": url, "error": "error"}
+                result = {"status": "error", "url": url, "error": e}
 
             self.result_queue.put((client_id, result))
             self.task_queue.task_done()
@@ -56,9 +58,7 @@ class Master:
 
     def start_workers(self):
         for i in range(self.num_workers):
-            worker = Worker(
-                i, self.task_queue, self.result_queue, self.top_k
-            )
+            worker = Worker(i, self.task_queue, self.result_queue, self.top_k)
             worker.start()
             self.workers.append(worker)
 
@@ -81,7 +81,6 @@ class Master:
         except Exception as e:
             print(f"Error handling client-{client_id}: {e}")
 
-
     def send_results(self):
         while True:
             client_id, result = self.result_queue.get()
@@ -89,7 +88,7 @@ class Master:
             print(conn)
             if conn:
                 try:
-                    conn.sendall(json.dumps(result).encode('utf-8'))
+                    conn.sendall(json.dumps(result).encode("utf-8"))
                 except Exception as e:
                     print(f"Error sending result to Client-{client_id}: {e}")
                 finally:
@@ -102,10 +101,7 @@ class Master:
 
     def run(self):
         self.start_workers()
-        threading.Thread(
-            target=self.send_results,
-            daemon=True
-        ).start()
+        threading.Thread(target=self.send_results, daemon=True).start()
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as serv_sock:
             serv_sock.bind((self.host, self.port))
@@ -122,7 +118,7 @@ class Master:
                     threading.Thread(
                         target=self.handle_client,
                         args=(client_sock, client_id),
-                        daemon=True
+                        daemon=True,
                     ).start()
                     client_id += 1
             except KeyboardInterrupt:
@@ -138,13 +134,15 @@ if __name__ == "__main__":
         "-w", "--workers", type=int, default=4, help="Number of workers"
     )
     parser.add_argument(
-        "-k", "--top_k",
-        type=int, default=10,
+        "-k", "--top_k", type=int,
+        default=10,
         help="Number of top frequent words"
     )
-    parser.add_argument("--host", default="localhost",
+    parser.add_argument("--host",
+                        default="localhost",
                         help="Host to bind the server")
-    parser.add_argument("--port", default=7777,
+    parser.add_argument("--port",
+                        default=7777,
                         help="Port to bind the server")
     args = parser.parse_args()
 
