@@ -1,7 +1,7 @@
 import argparse
+import json
 import threading
 import socket
-from inspect import cleandoc
 from queue import Queue
 
 
@@ -24,8 +24,9 @@ class Client:
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_sock:
                     client_sock.connect((self.host, self.port))
                     client_sock.sendall(f"{url}\n".encode("utf-8"))
-                    response = client_sock.recv(1024).decode("utf-8").strip()
-                    print(f"[Thread-{thread_id}] Server response: {response}")
+                    response = client_sock.recv(4096).decode("utf-8").strip()
+                    json_resp = json.loads(response) if response else 'empty answer'
+                    print(f"[Thread-{thread_id}] Server response: {json_resp}")
             except ConnectionError as e:
                 print(f"[Thread-{thread_id}] Error sending URL {url} : {e}")
             finally:
