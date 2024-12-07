@@ -89,5 +89,4 @@ if __name__ == "__main__":
         sys.exit()
 
     client = Client(args.host, args.port, urls, args.threads, args.batch_size)
-    # client.load_urls()
     client.run()

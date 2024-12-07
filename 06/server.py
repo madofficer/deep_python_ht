@@ -4,7 +4,9 @@ import queue
 import re
 import socket
 import threading
+import time
 from collections import Counter
+from time import perf_counter
 
 import requests
 
@@ -25,15 +27,24 @@ class Worker(threading.Thread):
 
             url, client_id = task
             print(f"[Worker - {self.worker_id}] Processing URL: {url}")
+            start_time = time.perf_counter()
             try:
                 response = requests.get(url, timeout=10)
                 response.raise_for_status()
                 top_words = self.word_counter(response.text)
+                elapsed_time = time.perf_counter() - start_time
                 result = {"status": "success",
                           "url": url,
-                          "top_words": top_words}
+                          "top_words": top_words,
+                          "elapsed_time": elapsed_time
+                }
             except Exception as e:
-                result = {"status": "error", "url": url, "error": e}
+                elapsed_time = time.perf_counter() - start_time
+                result = {"status": "error",
+                          "url": url,
+                          "error": e,
+                          "elapsed_time": elapsed_time
+                }
 
             self.result_queue.put((client_id, result))
             self.task_queue.task_done()
@@ -51,7 +62,7 @@ class Master:
         self.top_k = top_k
         self.task_queue = queue.Queue()
         self.result_queue = queue.Queue()
-        self.stats = {"processed": 0}
+        self.stats = {"processed": 0, "total_time": 0.0}
         self.stats_lock = threading.Lock()
         self.workers = []
         self.client_connections = {}
@@ -73,6 +84,7 @@ class Master:
             data = client_sock.recv(1024).decode("utf-8").strip()
             if data:
                 print(f"Received URL from Client {client_id}: {data}")
+
                 self.task_queue.put((data, client_id))
             else:
                 print(f"Client-{client_id} sent no data. Closing connection.")
@@ -85,10 +97,11 @@ class Master:
         while True:
             client_id, result = self.result_queue.get()
             conn = self.client_connections.get(client_id)
-            print(conn)
             if conn:
                 try:
+                    print(f"Sending result to Client-{client_id}")
                     conn.sendall(json.dumps(result).encode("utf-8"))
+                    end_time = time.perf_counter()
                 except Exception as e:
                     print(f"Error sending result to Client-{client_id}: {e}")
                 finally:
@@ -97,7 +110,11 @@ class Master:
 
             with self.stats_lock:
                 self.stats["processed"] += 1
-                print(f"Total URLs processed: {self.stats["processed"]}")
+                self.stats["total_time"] += result.get("elapsed_time", 0.0)
+                print(
+                    f"Total URLs processed: {self.stats["processed"]}, "
+                    f"Total time: {self.stats["total_time"]:2f} sec."
+                )
 
     def run(self):
         self.start_workers()
@@ -106,15 +123,14 @@ class Master:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as serv_sock:
             serv_sock.bind((self.host, self.port))
             serv_sock.listen()
-            print(f"Server listening on {self.host}:{self.port}")
+            print(f"Server listening on {self.host}:{self.port}\n")
 
             client_id = 0
             try:
                 while True:
                     client_sock, addr = serv_sock.accept()
-                    print(f"Connected by {addr}")
+                    print(f"Connected to Client-{client_id} by {addr}")
                     self.client_connections[client_id] = client_sock
-                    print(client_sock)
                     threading.Thread(
                         target=self.handle_client,
                         args=(client_sock, client_id),
@@ -125,7 +141,10 @@ class Master:
                 print("Shutting down Server...")
             finally:
                 self.stop_workers()
-                print(f"Total URL processed: {self.stats['processed']}")
+                print(
+                    f"Total URLs processed: {self.stats['processed']}, "
+                    f"Total time: {self.stats['total_time']:.2f} seconds"
+                )
 
 def server_arg_parse():
     parser = argparse.ArgumentParser(description="Master-worker server args")
