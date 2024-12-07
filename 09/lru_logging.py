@@ -103,7 +103,6 @@ def main():
     custom_filter = WordCountFilter() if args.f else None
     setup_logging(log_to_stdout=args.s, custom_filter=custom_filter)
 
-    # Пример операций с кэшем
     cache = LRUCache(capacity=3)
 
     cache.set('a', 1)
