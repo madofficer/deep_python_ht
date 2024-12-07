@@ -33,7 +33,7 @@ class TestWorker(unittest.TestCase):
         mock_get.return_value.text = "test test example example example"
 
         self.task_queue.put(("http://example.com", 1))
-        self.task_queue.put(None)  # Signal worker to stop
+        self.task_queue.put(None)
 
         self.worker.run()
         client_id, result = self.result_queue.get()
@@ -48,7 +48,7 @@ class TestWorker(unittest.TestCase):
         mock_get.side_effect = Exception("Connection error")
 
         self.task_queue.put(("http://invalid-url", 1))
-        self.task_queue.put(None)  # Signal worker to stop
+        self.task_queue.put(None)
 
         self.worker.run()
         client_id, result = self.result_queue.get()
@@ -140,7 +140,6 @@ class TestMasterHandleClient(unittest.TestCase):
 
         self.master.handle_client(client_mock, client_id=1)
 
-        # Проверяем, что URL добавлен в очередь задач
         task = self.master.task_queue.get_nowait()
         self.assertEqual(task, ("http://example.com", 1))
 
@@ -150,7 +149,6 @@ class TestMasterHandleClient(unittest.TestCase):
 
         self.master.handle_client(client_mock, client_id=1)
 
-        # Проверяем, что клиент был закрыт
         client_mock.close.assert_called()
 
     def test_handle_client_with_invalid_data(self):
