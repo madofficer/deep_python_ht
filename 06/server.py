@@ -127,8 +127,7 @@ class Master:
                 self.stop_workers()
                 print(f"Total URL processed: {self.stats['processed']}")
 
-
-if __name__ == "__main__":
+def server_arg_parse():
     parser = argparse.ArgumentParser(description="Master-worker server args")
     parser.add_argument(
         "-w", "--workers", type=int, default=4, help="Number of workers"
@@ -144,7 +143,12 @@ if __name__ == "__main__":
     parser.add_argument("--port",
                         default=7777,
                         help="Port to bind the server")
-    args = parser.parse_args()
+    return parser.parse_args()
 
+
+
+
+if __name__ == "__main__":
+    args = server_arg_parse()
     server = Master(args.host, args.port, args.workers, args.top_k)
     server.run()

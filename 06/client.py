@@ -6,20 +6,28 @@ from queue import Queue
 
 
 class Client:
-    def __init__(self, host, port, urls, num_threads):
+    def __init__(self, host, port, urls, num_threads, batch_size):
         self.host = host
         self.port = port
         self.urls = urls
         self.num_threads = num_threads
-        self.queue = Queue()
+        self.batch_size = batch_size
+        self.queue = Queue(maxsize=batch_size)
+
+    def batch_urls(self):
+        for i in range(0, len(self.urls), self.batch_size):
+            yield self.urls[i:i + self.batch_size]
 
     def load_urls(self):
         for url in self.urls:
             self.queue.put(url)
 
     def worker(self, thread_id):
-        while not self.queue.empty():
+        print(f'Worker started')
+        while True:
             url = self.queue.get()
+            if url is None:
+                break
             try:
                 with socket.socket(
                         socket.AF_INET, socket.SOCK_STREAM
@@ -43,6 +51,14 @@ class Client:
             threads.append(t)
             t.start()
 
+        for batch in self.batch_urls():
+            for url in batch:
+                self.queue.put(url)
+            self.queue.join()
+
+        for _ in range(self.num_threads):
+            self.queue.put(None)
+
         for t in threads:
             t.join()
 
@@ -61,6 +77,8 @@ if __name__ == "__main__":
     parser.add_argument("--port",
                         default=7777,
                         help="Port of the server")
+    parser.add_argument("--batch_size", type=int, default=3,
+                        help="Number of URLs to process per batch")
     args = parser.parse_args()
 
     try:
@@ -70,6 +88,6 @@ if __name__ == "__main__":
         print(f"Error: File {args.file} not found")
         sys.exit()
 
-    client = Client(args.host, args.port, urls, args.threads)
-    client.load_urls()
+    client = Client(args.host, args.port, urls, args.threads, args.batch_size)
+    # client.load_urls()
     client.run()
