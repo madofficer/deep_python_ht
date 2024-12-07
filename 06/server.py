@@ -33,17 +33,19 @@ class Worker(threading.Thread):
                 response.raise_for_status()
                 top_words = self.word_counter(response.text)
                 elapsed_time = time.perf_counter() - start_time
-                result = {"status": "success",
-                          "url": url,
-                          "top_words": top_words,
-                          "elapsed_time": elapsed_time
+                result = {
+                    "status": "success",
+                    "url": url,
+                    "top_words": top_words,
+                    "elapsed_time": elapsed_time,
                 }
             except Exception as e:
                 elapsed_time = time.perf_counter() - start_time
-                result = {"status": "error",
-                          "url": url,
-                          "error": e,
-                          "elapsed_time": elapsed_time
+                result = {
+                    "status": "error",
+                    "url": url,
+                    "error": e,
+                    "elapsed_time": elapsed_time,
                 }
 
             self.result_queue.put((client_id, result))
@@ -95,13 +97,16 @@ class Master:
 
     def send_results(self):
         while True:
-            client_id, result = self.result_queue.get()
+            data = self.result_queue.get()
+            if data is None:
+                print("Nothing to send")
+                break
+            client_id, result = data
             conn = self.client_connections.get(client_id)
             if conn:
                 try:
                     print(f"Sending result to Client-{client_id}")
                     conn.sendall(json.dumps(result).encode("utf-8"))
-                    end_time = time.perf_counter()
                 except Exception as e:
                     print(f"Error sending result to Client-{client_id}: {e}")
                 finally:
@@ -146,25 +151,29 @@ class Master:
                     f"Total time: {self.stats['total_time']:.2f} seconds"
                 )
 
+
 def server_arg_parse():
     parser = argparse.ArgumentParser(description="Master-worker server args")
     parser.add_argument(
         "-w", "--workers", type=int, default=4, help="Number of workers"
     )
     parser.add_argument(
-        "-k", "--top_k", type=int,
+        "-k", "--top_k",
+        type=int,
         default=10,
         help="Number of top frequent words"
     )
-    parser.add_argument("--host",
-                        default="localhost",
-                        help="Host to bind the server")
-    parser.add_argument("--port",
-                        default=7777,
-                        help="Port to bind the server")
+    parser.add_argument(
+        "--host",
+        default="localhost",
+        help="Host to bind the server"
+    )
+    parser.add_argument(
+        "--port",
+        default=7777,
+        help="Port to bind the server"
+    )
     return parser.parse_args()
-
-
 
 
 if __name__ == "__main__":

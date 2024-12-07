@@ -25,6 +25,8 @@ disable=
     C2801,   # unnecessary call
     W0640,   # variable defined in loop (cell-var-from-loop)
     W1203,   # Use lazy % formatting
+    R0902,   # too many attrs
+    R0913,   # too many args
 
 
 
