@@ -1,12 +1,8 @@
-import aiohttp
 import asyncio
 import argparse
+import aiohttp
 from aiohttp import ClientError
 from aiofiles import open as aio_open
-
-
-def sanitize_filename(url):
-    return re.sub(r'[^\w\-_\.]', '_', url)
 
 
 async def fetch_url(session, url):
@@ -31,7 +27,7 @@ async def process_urls(file_path, max_concurrent_req):
             async with aiohttp.ClientSession() as session:
                 await fetch_url(session, url)
 
-    async with aio_open(file_path, mode='r') as f:
+    async with aio_open(file_path, mode="r") as f:
         tasks = []
         async for line in f:
             task = asyncio.create_task(process_line(line))
@@ -46,18 +42,14 @@ async def process_urls(file_path, max_concurrent_req):
 
 
 def parse_fetcher_args():
-    parser = argparse.ArgumentParser(description="Async server for fetching URL")
-    parser.add_argument(
-        "-f", "--file",
-        type=str,
-        required=True,
-        help="File path to urls"
+    parser = argparse.ArgumentParser(
+        description="Async server for fetching URL"
     )
     parser.add_argument(
-        "-c", "--concurrent",
-        type=int,
-        default=10,
-        help="Max queries at once"
+        "-f", "--file", type=str, required=True, help="File path to urls"
+    )
+    parser.add_argument(
+        "-c", "--concurrent", type=int, default=10, help="Max queries at once"
     )
     return parser.parse_args()
 
