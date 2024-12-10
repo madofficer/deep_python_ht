@@ -1,6 +1,7 @@
 import json
 import custom_json
 
+
 def main():
     json_str = '{"hello": 10, "world": "value"}'
 
@@ -14,6 +15,7 @@ def main():
 
     assert json_doc == cust_json_doc
     assert json_str == custom_json.dumps(custom_json.loads(json_str))
+
 
 if __name__ == "__main__":
     main()

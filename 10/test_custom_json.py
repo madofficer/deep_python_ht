@@ -12,7 +12,7 @@ class TestCustomJson(unittest.TestCase):
 
     def test_dumps_valid(self):
         obj = {"hello": 10, "world": "value"}
-        expected = json.dumps(obj, separators=(', ', ': '))
+        expected = json.dumps(obj, separators=(", ", ": "))
         result = custom_json.dumps(obj)
         self.assertEqual(result, expected)
 
@@ -24,8 +24,8 @@ class TestCustomJson(unittest.TestCase):
 
     def test_invalid_loads(self):
         invalid_jsons = [
-            '',
-            'hello',
+            "",
+            "hello",
             '{"key": value}',
             '{"key": 123,}',
             '{"key": [1, 2,]',
@@ -48,9 +48,10 @@ class TestCustomJson(unittest.TestCase):
 
                 serialized_custom = custom_json.dumps(parsed_custom)
                 serialized_standard = json.dumps(
-                    parsed_standard, separators=(', ', ': '))
+                    parsed_standard, separators=(", ", ": ")
+                )
                 self.assertEqual(serialized_custom, serialized_standard)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
