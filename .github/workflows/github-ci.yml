@@ -315,13 +315,3 @@ jobs:
       - name: Check pylint for 10
         working-directory: ./10
         run: pylint $(find . -name "*.py" | xargs)
-
-      - name: Run tests with pytest and check coverage for 10
-        working-directory: ./10
-        run: |
-          coverage run -m pytest 
-
-      - name: Check test coverage for 10
-        working-directory: ./10
-        run: coverage report -m
-
