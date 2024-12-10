@@ -21,32 +21,24 @@ def mean_deco(k):
 
     return decorator
 
-@mean_deco(5)
-def find_primes(n):
-    primes = []
-    for i in range(2, n + 1):
-        is_prime = True
-        for j in range(2, int(i**0.5) + 1):
-            if i % j == 0:
-                is_prime = False
-                break
-        if is_prime:
-            primes.append(i)
-    return primes
 
-
+print('foo')
 @mean_deco(10)
 def foo(arg1):
     time.sleep(0.01)
+    print(10 / 0)
     return 10
 
+print('boo')
 @mean_deco(2)
 def boo(a, b):
     time.sleep(0.02)
     return a + b
 
+print('walter')
 for _ in range(100):
     foo("Walter")
 
+print('')
 for _ in range(10):
     boo(3, 7)
